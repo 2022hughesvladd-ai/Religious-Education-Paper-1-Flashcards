@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GCSE RS AQA — Christianity & Islam Flashcards</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0e0c;
+    --surface: #1a1917;
+    --surface2: #242220;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #f0ede8;
+    --muted: #8a8680;
+    --subtle: #4a4845;
+    --gold: #c9a84c;
+    --gold-dim: #7a6530;
+    --blue: #4a8fc4;
+    --blue-dim: #1e3f5a;
+    --green: #4aab78;
+    --green-dim: #1e4a33;
+    --red: #c45a5a;
+    --red-dim: #4a2020;
+    --christian: #b8874a;
+    --christian-bg: rgba(184,135,74,0.12);
+    --islam: #4aab78;
+    --islam-bg: rgba(74,171,120,0.12);
+    --radius: 14px;
+    --card-h: 260px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* Header */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+  }
+
+  .header-title h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  .header-title p {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 2px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.8rem;
+  }
+
+  .stat-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+  }
+
+  .stat-pill .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+  }
+
+  .stat-pill.known .dot { background: var(--green); }
+  .stat-pill.learning .dot { background: var(--red); }
+  .stat-pill.unseen .dot { background: var(--subtle); }
+
+  .stat-pill span.num { color: var(--text); font-weight: 500; }
+
+  /* Main layout */
+  main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* Filters */
+  .filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.75rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  select {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    padding: 9px 14px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 400;
+    cursor: pointer;
+    flex: 1;
+    min-width: 160px;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a8680' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  select:focus { border-color: var(--gold-dim); }
+
+  .btn-shuffle {
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .btn-shuffle:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+  /* Progress bar */
+  .progress-wrap {
+    height: 2px;
+    background: var(--surface2);
+    border-radius: 1px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+  .progress-inner {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 1px;
+    transition: width 0.4s ease;
+    opacity: 0.7;
+  }
+
+  /* Card counter */
+  .card-counter {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+  }
+
+  /* Flashcard */
+  .card-scene {
+    perspective: 1200px;
+    width: 100%;
+    height: var(--card-h);
+    cursor: pointer;
+    margin-bottom: 1.25rem;
+    user-select: none;
+  }
+
+  .card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-inner.flipped { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: var(--radius);
+    border: 1px solid var(--border2);
+    display: flex;
+    flex-direction: column;
+    padding: 1.75rem 2rem;
+    overflow: hidden;
+  }
+
+  .card-front {
+    background: var(--surface);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.75rem;
+  }
+
+  .card-back {
+    background: var(--surface2);
+    transform: rotateY(180deg);
+    justify-content: center;
+    gap: 0;
+  }
+
+  /* Decorative corner on front */
+  .card-front::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 80px; height: 80px;
+    border-radius: 0 var(--radius) 0 80px;
+    opacity: 0.06;
+  }
+
+  .card-front.christian-card::before { background: var(--christian); }
+  .card-front.islam-card::before { background: var(--islam); }
+
+  .religion-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 4px 11px;
+    border-radius: 20px;
+  }
+
+  .religion-badge.christian { background: var(--christian-bg); color: var(--christian); }
+  .religion-badge.islam { background: var(--islam-bg); color: var(--islam); }
+
+  .section-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  .topic-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--text);
+    max-width: 560px;
+  }
+
+  .tap-hint {
+    font-size: 0.7rem;
+    color: var(--subtle);
+    letter-spacing: 0.04em;
+    margin-top: 0.25rem;
+  }
+
+  /* Back face */
+  .quote-block {
+    padding: 0.85rem 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+
+  .quote-block + .quote-block {
+    border-top: 1px solid var(--border);
+  }
+
+  .quote-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+    transition: opacity 0.3s ease;
+  }
+
+  .quote-ref {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: var(--gold);
+    text-transform: uppercase;
+    transition: opacity 0.3s ease;
+  }
+
+  /* Hidden quote state */
+  .quote-block.hidden .quote-text,
+  .quote-block.hidden .quote-ref {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .quote-reveal-btn {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px dashed var(--subtle);
+    border-radius: 8px;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s;
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .quote-reveal-btn:hover {
+    border-color: var(--gold-dim);
+    color: var(--gold);
+    background: rgba(201,168,76,0.05);
+  }
+
+  .quote-block:not(.hidden) .quote-reveal-btn {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .quote-num {
+    font-size: 0.65rem;
+    color: var(--subtle);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  /* Action buttons (after flip) */
+  .action-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.25rem;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
+  }
+
+  .action-row.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+
+  .btn-action {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    background: transparent;
+  }
+
+  .btn-learning {
+    border-color: var(--red-dim);
+    color: var(--red);
+  }
+  .btn-learning:hover { background: var(--red-dim); }
+
+  .btn-known {
+    border-color: var(--green-dim);
+    color: var(--green);
+  }
+  .btn-known:hover { background: var(--green-dim); }
+
+  /* Nav */
+  .nav-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn-nav {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    padding: 11px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+
+  .btn-nav:hover { border-color: var(--border2); color: var(--text); background: var(--surface2); }
+  .btn-nav:disabled { opacity: 0.3; cursor: default; }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+
+  @media (max-width: 520px) {
+    header { padding: 1rem; }
+    main { padding: 1.25rem 1rem 3rem; }
+    .card-face { padding: 1.25rem 1.25rem; }
+    .topic-text { font-size: 0.95rem; }
+    :root { --card-h: 240px; }
+    .header-stats { gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-title">
+    <h1>GCSE RS — AQA Spec A</h1>
+    <p>Christianity &amp; Islam · Quotes Flashcards</p>
+  </div>
+  <div class="header-stats">
+    <div class="stat-pill known"><div class="dot"></div>Known <span class="num" id="hdr-known">0</span></div>
+    <div class="stat-pill learning"><div class="dot"></div>Learning <span class="num" id="hdr-learn">0</span></div>
+    <div class="stat-pill unseen"><div class="dot"></div>Unseen <span class="num" id="hdr-unseen">40</span></div>
+  </div>
+</header>
+
+<main>
+  <div class="filters">
+    <select id="filter-rel">
+      <option value="all">All religions</option>
+      <option value="christianity">Christianity</option>
+      <option value="islam">Islam</option>
+    </select>
+    <select id="filter-section"></select>
+    <button class="btn-shuffle" id="btn-shuffle">⇄ Shuffle</button>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-inner" id="progress-bar" style="width: 2.5%"></div>
+  </div>
+
+  <div class="card-counter" id="card-counter">Card 1 of 40</div>
+
+  <div class="card-scene" id="card-scene" onclick="flipCard()">
+    <div class="card-inner" id="card-inner">
+      <div class="card-face card-front" id="card-front">
+        <span class="religion-badge" id="front-badge">Christianity</span>
+        <div class="section-label" id="front-section">Beliefs — Nature of God</div>
+        <div class="topic-text" id="front-topic"></div>
+        <div class="tap-hint">tap to flip, then reveal each quote</div>
+      </div>
+      <div class="card-face card-back" id="card-back">
+        <div class="quote-block hidden" id="qblock-1">
+          <div class="quote-num">Quote 1</div>
+          <div class="quote-text" id="back-q1"></div>
+          <div class="quote-ref" id="back-r1"></div>
+          <button class="quote-reveal-btn" onclick="revealQuote(event,1)">Tap to reveal quote 1</button>
+        </div>
+        <div class="quote-block hidden" id="qblock-2">
+          <div class="quote-num">Quote 2</div>
+          <div class="quote-text" id="back-q2"></div>
+          <div class="quote-ref" id="back-r2"></div>
+          <button class="quote-reveal-btn" onclick="revealQuote(event,2)">Tap to reveal quote 2</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="action-row" id="action-row">
+    <button class="btn-action btn-learning" onclick="markCard(false)">Still learning</button>
+    <button class="btn-action btn-known" onclick="markCard(true)">Got it ✓</button>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn-nav" id="btn-prev" onclick="prevCard()" disabled>← Previous</button>
+    <button class="btn-nav" id="btn-next" onclick="nextCard()">Next →</button>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#b8874a"></div>Christianity</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#4aab78"></div>Islam</div>
+    <div class="legend-item" style="color:#4a4845; font-size:0.72rem;">40 topics · 2 quotes each · flip then reveal each quote</div>
+  </div>
+</main>
+
+<script>
+const ALL_CARDS = [
+  {rel:"christianity",section:"Beliefs — Nature of God",topic:"God as omnipotent, loving and just, and the problem of evil and suffering",q1:"God is love, and whoever abides in love abides in God, and God abides in him.",r1:"1 John 4:16",q2:"Is anything too hard for the Lord?",r2:"Genesis 18:14"},
+  {rel:"christianity",section:"Beliefs — Nature of God",topic:"The oneness of God and the Trinity: Father, Son and Holy Spirit",q1:"Go and make disciples of all nations, baptising them in the name of the Father and of the Son and of the Holy Spirit.",r1:"Matthew 28:19",q2:"Hear, O Israel: The Lord our God, the Lord is one.",r2:"Deuteronomy 6:4"},
+  {rel:"christianity",section:"Beliefs — Nature of God",topic:"Different Christian beliefs about creation including the role of Word and Spirit (John 1:1-3 and Genesis 1:1-3)",q1:"In the beginning was the Word, and the Word was with God, and the Word was God.",r1:"John 1:1",q2:"In the beginning God created the heavens and the earth.",r2:"Genesis 1:1"},
+  {rel:"christianity",section:"Beliefs — Nature of God",topic:"Different Christian beliefs about the afterlife: resurrection, judgement, heaven and hell",q1:"I am the resurrection and the life. The one who believes in me will live, even though they die.",r1:"John 11:25",q2:"The righteous will go into eternal life.",r2:"Matthew 25:46"},
+  {rel:"christianity",section:"Beliefs — Jesus & Salvation",topic:"The incarnation and Jesus as the Son of God",q1:"The Word became flesh and made his dwelling among us.",r1:"John 1:14",q2:"You are my Son, whom I love; with you I am well pleased.",r2:"Luke 3:22"},
+  {rel:"christianity",section:"Beliefs — Jesus & Salvation",topic:"The crucifixion, resurrection and ascension",q1:"Christ died for our sins according to the Scriptures, and was raised on the third day.",r1:"1 Corinthians 15:3-4",q2:"He was taken up before their very eyes, and a cloud hid him from their sight.",r2:"Acts 1:9"},
+  {rel:"christianity",section:"Beliefs — Jesus & Salvation",topic:"Sin, including original sin",q1:"All have sinned and fall short of the glory of God.",r1:"Romans 3:23",q2:"Death came to all people, because all sinned.",r2:"Romans 5:12"},
+  {rel:"christianity",section:"Beliefs — Jesus & Salvation",topic:"The means of salvation: law, grace and Spirit",q1:"It is by grace you have been saved, through faith — it is the gift of God.",r1:"Ephesians 2:8",q2:"The law of the Spirit who gives life has set you free from the law of sin and death.",r2:"Romans 8:2"},
+  {rel:"christianity",section:"Beliefs — Jesus & Salvation",topic:"The role of Christ in salvation including atonement",q1:"God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish.",r1:"John 3:16",q2:"Christ redeemed us from the curse of the law by becoming a curse for us.",r2:"Galatians 3:13"},
+  {rel:"christianity",section:"Practices — Worship & Festivals",topic:"Different forms of worship: liturgical, non-liturgical and informal, including use of the Bible",q1:"God is spirit, and his worshippers must worship in the Spirit and in truth.",r1:"John 4:24",q2:"Let the word of Christ dwell in you richly, teaching and admonishing one another in all wisdom.",r2:"Colossians 3:16"},
+  {rel:"christianity",section:"Practices — Worship & Festivals",topic:"Private worship",q1:"When you pray, go into your room, close the door and pray to your Father, who is unseen.",r1:"Matthew 6:6",q2:"Rejoice always, pray continually, give thanks in all circumstances.",r2:"1 Thessalonians 5:16-18"},
+  {rel:"christianity",section:"Practices — Worship & Festivals",topic:"Prayer and its significance, including the Lord's Prayer, set prayers and informal prayer",q1:"Our Father in heaven, hallowed be your name, your kingdom come, your will be done.",r1:"Matthew 6:9-10",q2:"Ask and it will be given to you; seek and you will find.",r2:"Matthew 7:7"},
+  {rel:"christianity",section:"Practices — Worship & Festivals",topic:"The meaning of sacrament",q1:"You are the body of Christ, and each one of you is a part of it.",r1:"1 Corinthians 12:27",q2:"Do this in remembrance of me.",r2:"Luke 22:19"},
+  {rel:"christianity",section:"Practices — Worship & Festivals",topic:"Baptism and its significance; infant and believers' baptism; different beliefs about infant baptism",q1:"Repent and be baptised, every one of you, in the name of Jesus Christ for the forgiveness of your sins.",r1:"Acts 2:38",q2:"Whoever believes and is baptised will be saved.",r2:"Mark 16:16"},
+  {rel:"christianity",section:"Practices — Worship & Festivals",topic:"Holy Communion / Eucharist and its significance; different ways it is celebrated",q1:"This is my body, which is given for you.",r1:"Luke 22:19",q2:"Whenever you eat this bread and drink this cup, you proclaim the Lord's death until he comes.",r2:"1 Corinthians 11:26"},
+  {rel:"christianity",section:"Practices — Worship & Festivals",topic:"The role and importance of pilgrimage: Lourdes and Iona",q1:"Blessed are those whose strength is in you, whose hearts are set on pilgrimage.",r1:"Psalm 84:5",q2:"How lovely is your dwelling place, Lord Almighty! My soul yearns for the courts of the Lord.",r2:"Psalm 84:1-2"},
+  {rel:"christianity",section:"Practices — Worship & Festivals",topic:"Christmas and Easter and their importance for Christians in Great Britain today",q1:"Today in the town of David a Saviour has been born to you; he is the Messiah, the Lord.",r1:"Luke 2:11",q2:"He is not here; he has risen, just as he said.",r2:"Matthew 28:6"},
+  {rel:"christianity",section:"Practices — Role of the Church",topic:"The role of the Church in the local community, including food banks and street pastors",q1:"Whatever you did for one of the least of these brothers and sisters of mine, you did for me.",r1:"Matthew 25:40",q2:"Love your neighbour as yourself.",r2:"Mark 12:31"},
+  {rel:"christianity",section:"Practices — Role of the Church",topic:"The place of mission, evangelism and Church growth",q1:"Go into all the world and preach the gospel to all creation.",r1:"Mark 16:15",q2:"You will be my witnesses in Jerusalem, and in all Judea and Samaria, and to the ends of the earth.",r2:"Acts 1:8"},
+  {rel:"christianity",section:"Practices — Role of the Church",topic:"Working for reconciliation",q1:"Blessed are the peacemakers, for they will be called children of God.",r1:"Matthew 5:9",q2:"God gave us the ministry of reconciliation.",r2:"2 Corinthians 5:18"},
+  {rel:"christianity",section:"Practices — Role of the Church",topic:"How Christian churches respond to persecution",q1:"Blessed are those who are persecuted because of righteousness, for theirs is the kingdom of heaven.",r1:"Matthew 5:10",q2:"Do not be afraid of those who kill the body but cannot kill the soul.",r2:"Matthew 10:28"},
+  {rel:"christianity",section:"Practices — Role of the Church",topic:"The work of CAFOD, Christian Aid, or Tearfund",q1:"Faith by itself, if it is not accompanied by action, is dead.",r1:"James 2:17",q2:"What does the Lord require of you? To act justly and to love mercy.",r2:"Micah 6:8"},
+  {rel:"islam",section:"Beliefs — Key Beliefs",topic:"The six articles of faith (Sunni) and five roots of Usul ad-Din (Shi'a), including key similarities and differences",q1:"Each one believes in Allah, His angels, His books, and His messengers.",r1:"Qur'an 2:285",q2:"Righteousness is to believe in Allah, the Last Day, the angels, the Book, and the prophets.",r2:"Qur'an 2:177"},
+  {rel:"islam",section:"Beliefs — Key Beliefs",topic:"Tawhid (the Oneness of God), Qur'an Surah 112",q1:"Say: He is Allah, the One. Allah, the Eternal, Absolute. He begets not, nor is He begotten.",r1:"Qur'an 112:1-4 (Surah Al-Ikhlas)",q2:"Your God is one God; there is no god but Him, the Most Gracious, the Most Merciful.",r2:"Qur'an 2:163"},
+  {rel:"islam",section:"Beliefs — Key Beliefs",topic:"The nature of God: omnipotence, beneficence, mercy, fairness/justice (Adalat); immanence and transcendence",q1:"He is the First and the Last, the Most High and the Most Near, and He has full knowledge of all things.",r1:"Qur'an 57:3",q2:"Allah is the Most Gracious, the Most Merciful.",r2:"Qur'an 1:1 (Basmala)"},
+  {rel:"islam",section:"Beliefs — Key Beliefs",topic:"Angels, their nature and role, including Jibril and Mika'il",q1:"He sends down His angels with the inspiration of His command to whom He wills of His servants.",r1:"Qur'an 16:2",q2:"Whoever is an enemy to Allah and His angels and Jibril and Mika'il — then indeed, Allah is an enemy to the disbelievers.",r2:"Qur'an 2:98"},
+  {rel:"islam",section:"Beliefs — Key Beliefs",topic:"Predestination (Al-Qadr) and human free will",q1:"Indeed, everything have We created in precise measure.",r1:"Qur'an 54:49",q2:"Whoever wills, let him take a path to his Lord.",r2:"Qur'an 73:19"},
+  {rel:"islam",section:"Beliefs — Key Beliefs",topic:"Akhirah: Muslim beliefs about life after death",q1:"Every soul shall taste death, and you will only be given your full recompense on the Day of Resurrection.",r1:"Qur'an 3:185",q2:"Whoever has done a grain's weight of good will see it, and whoever has done a grain's weight of evil will see it.",r2:"Qur'an 99:7-8"},
+  {rel:"islam",section:"Beliefs — Authority",topic:"Prophethood (Risalah): the nature and importance of prophethood; Ibrahim and Muhammad",q1:"Muhammad is not the father of any of your men, but he is the Messenger of Allah and the last of the prophets.",r1:"Qur'an 33:40",q2:"We have sent you as a mercy to all the worlds.",r2:"Qur'an 21:107"},
+  {rel:"islam",section:"Beliefs — Authority",topic:"The Holy Books: the Qur'an — revelation and authority; Torah, Psalms, Gospel and their authority",q1:"This is the Book about which there is no doubt, a guidance for those conscious of Allah.",r1:"Qur'an 2:2",q2:"Indeed, it is We who sent down the Qur'an and indeed, We will be its guardian.",r2:"Qur'an 15:9"},
+  {rel:"islam",section:"Beliefs — Authority",topic:"The Imamate in Shi'a Islam: its role and significance",q1:"Obey Allah and obey the Messenger, and those in authority among you.",r1:"Qur'an 4:59",q2:"None of you truly believes until I am more beloved to him than his father, his children, and all of mankind.",r2:"Hadith, Sahih al-Bukhari 15"},
+  {rel:"islam",section:"Practices — Five Pillars",topic:"Shahadah: declaration of faith and its place in Muslim practice",q1:"There is no god but Allah, and Muhammad is the Messenger of Allah.",r1:"The Shahadah",q2:"So know that there is no god but Allah, and ask forgiveness for your sin.",r2:"Qur'an 47:19"},
+  {rel:"islam",section:"Practices — Five Pillars",topic:"Salah and its significance: how and why Muslims pray, including wudu, rak'ahs; Sunni and Shi'a differences",q1:"Indeed, prayer has been decreed upon the believers a decree of specified times.",r1:"Qur'an 4:103",q2:"Guard strictly the prayers, especially the middle prayer. And stand before Allah devoutly obedient.",r2:"Qur'an 2:238"},
+  {rel:"islam",section:"Practices — Five Pillars",topic:"Sawm: the fast of Ramadan including its significance and the Night of Power (Laylat al-Qadr)",q1:"Fasting is prescribed for you as it was prescribed for those before you, that you may achieve taqwa.",r1:"Qur'an 2:183",q2:"The Night of Decree is better than a thousand months.",r2:"Qur'an 97:3"},
+  {rel:"islam",section:"Practices — Five Pillars",topic:"Zakah: giving alms — origins, how and why it is given, benefits; Khums in Shi'a Islam",q1:"Establish prayer and give zakah, and whatever good you put forward for yourselves — you will find it with Allah.",r1:"Qur'an 2:110",q2:"Take from their wealth a charity to purify them and cause them increase.",r2:"Qur'an 9:103"},
+  {rel:"islam",section:"Practices — Five Pillars",topic:"Hajj: pilgrimage to Makkah — origins, how it is performed, Ka'aba, Mina, Arafat, Muzdalifah",q1:"Proclaim to the people the Hajj; they will come to you on foot and on every lean camel from every distant pass.",r1:"Qur'an 22:27",q2:"Complete the Hajj and umrah for Allah.",r2:"Qur'an 2:196"},
+  {rel:"islam",section:"Practices — Five Pillars",topic:"Jihad: greater and lesser jihad — meaning, significance, origins and conditions for lesser jihad",q1:"Permission to fight is given to those who are fought against because they have been wronged.",r1:"Qur'an 22:39",q2:"Fight in the way of Allah against those who fight you, but do not transgress.",r2:"Qur'an 2:190"},
+  {rel:"islam",section:"Practices — Festivals",topic:"Id-ul-Adha: origins and meaning",q1:"O Ibrahim! You have fulfilled the vision. Indeed, We thus reward the doers of good.",r1:"Qur'an 37:104-105",q2:"Their meat will not reach Allah, nor will their blood, but what reaches Him is piety from you.",r2:"Qur'an 22:37"},
+  {rel:"islam",section:"Practices — Festivals",topic:"Id-ul-Fitr: origins and meaning",q1:"He wants for you ease and does not want hardship for you.",r1:"Qur'an 2:185",q2:"Complete the fast, then glorify Allah for having guided you, and perhaps you will be grateful.",r2:"Qur'an 2:185"},
+  {rel:"islam",section:"Practices — Festivals",topic:"Ashura: origins and meaning",q1:"We took the Children of Israel across the sea, and Pharaoh and his soldiers followed them in tyranny.",r1:"Qur'an 10:90",q2:"This is a day on which Moses fasted as gratitude to Allah, so we also fast on this day.",r2:"Hadith, Sahih al-Bukhari 3943"},
+];
+
+let deck = [...ALL_CARDS];
+let idx = 0;
+let isFlipped = false;
+let known = new Set();
+let learning = new Set();
+let seen = new Set();
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+}
+
+function buildSections() {
+  const rel = document.getElementById('filter-rel').value;
+  const sel = document.getElementById('filter-section');
+  const prev = sel.value;
+  sel.innerHTML = '<option value="all">All sections</option>';
+  const secs = [...new Set(ALL_CARDS.filter(c => rel === 'all' || c.rel === rel).map(c => c.section))];
+  secs.forEach(s => {
+    const o = document.createElement('option');
+    o.value = s; o.textContent = s; sel.appendChild(o);
+  });
+  sel.value = secs.includes(prev) ? prev : 'all';
+}
+
+function applyFilters() {
+  const rel = document.getElementById('filter-rel').value;
+  const sec = document.getElementById('filter-section').value;
+  deck = ALL_CARDS.filter(c => (rel === 'all' || c.rel === rel) && (sec === 'all' || c.section === sec));
+  idx = 0; seen.clear(); known.clear(); learning.clear();
+  render(false);
+}
+
+function render(wasFlipped) {
+  const c = deck[idx];
+  const ci = document.getElementById('card-inner');
+  if (wasFlipped) { ci.classList.remove('flipped'); isFlipped = false; }
+  document.getElementById('action-row').classList.remove('visible');
+  document.getElementById('qblock-1').classList.add('hidden');
+  document.getElementById('qblock-2').classList.add('hidden');
+
+  const isChristian = c.rel === 'christianity';
+  const badgeClass = isChristian ? 'christian' : 'islam';
+  const badgeLabel = isChristian ? 'Christianity' : 'Islam';
+  const frontFace = document.getElementById('card-front');
+  frontFace.className = 'card-face card-front ' + (isChristian ? 'christian-card' : 'islam-card');
+
+  document.getElementById('front-badge').textContent = badgeLabel;
+  document.getElementById('front-badge').className = 'religion-badge ' + badgeClass;
+  document.getElementById('front-section').textContent = c.section;
+  document.getElementById('front-topic').textContent = c.topic;
+  document.getElementById('back-q1').textContent = '\u201C' + c.q1 + '\u201D';
+  document.getElementById('back-r1').textContent = c.r1;
+  document.getElementById('back-q2').textContent = '\u201C' + c.q2 + '\u201D';
+  document.getElementById('back-r2').textContent = c.r2;
+
+  const total = deck.length;
+  document.getElementById('card-counter').textContent = 'Card ' + (idx + 1) + ' of ' + total;
+  document.getElementById('progress-bar').style.width = (((idx + 1) / total) * 100).toFixed(1) + '%';
+  document.getElementById('btn-prev').disabled = idx === 0;
+  document.getElementById('btn-next').disabled = idx === deck.length - 1;
+  updateStats();
+}
+
+function updateStats() {
+  document.getElementById('hdr-known').textContent = known.size;
+  document.getElementById('hdr-learn').textContent = learning.size;
+  document.getElementById('hdr-unseen').textContent = deck.length - seen.size;
+}
+
+function flipCard() {
+  const ci = document.getElementById('card-inner');
+  isFlipped = !isFlipped;
+  ci.classList.toggle('flipped', isFlipped);
+  const key = deck[idx].rel + '|' + idx;
+  seen.add(key);
+  if (!isFlipped) {
+    document.getElementById('qblock-1').classList.add('hidden');
+    document.getElementById('qblock-2').classList.add('hidden');
+  }
+  if (!isFlipped) document.getElementById('action-row').classList.remove('visible');
+  updateStats();
+}
+
+function revealQuote(e, n) {
+  e.stopPropagation();
+  document.getElementById('qblock-' + n).classList.remove('hidden');
+  const allRevealed = !document.getElementById('qblock-1').classList.contains('hidden') &&
+                      !document.getElementById('qblock-2').classList.contains('hidden');
+  if (allRevealed) {
+    document.getElementById('action-row').classList.add('visible');
+  }
+}
+
+function markCard(isKnown) {
+  const key = deck[idx].rel + '|' + idx;
+  if (isKnown) { known.add(key); learning.delete(key); }
+  else { learning.add(key); known.delete(key); }
+  nextCard();
+}
+
+function nextCard() {
+  if (idx < deck.length - 1) { idx++; render(true); }
+}
+
+function prevCard() {
+  if (idx > 0) { idx--; render(true); }
+}
+
+document.getElementById('btn-shuffle').addEventListener('click', () => {
+  shuffle(deck); idx = 0; seen.clear(); known.clear(); learning.clear(); render(false);
+});
+document.getElementById('filter-rel').addEventListener('change', () => { buildSections(); applyFilters(); });
+document.getElementById('filter-section').addEventListener('change', applyFilters);
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') nextCard();
+  else if (e.key === 'ArrowLeft') prevCard();
+  else if (e.key === ' ') {
+    e.preventDefault();
+    if (!isFlipped) { flipCard(); }
+    else if (document.getElementById('qblock-1').classList.contains('hidden')) { document.getElementById('qblock-1').classList.remove('hidden'); }
+    else if (document.getElementById('qblock-2').classList.contains('hidden')) {
+      document.getElementById('qblock-2').classList.remove('hidden');
+      document.getElementById('action-row').classList.add('visible');
+    }
+  }
+  else if (e.key === '1') markCard(false);
+  else if (e.key === '2') markCard(true);
+});
+
+buildSections();
+render(false);
+</script>
+</body>
+</html>
