@@ -1,1 +1,3280 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GCSE RS AQA — Christianity & Islam Flashcards</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0e0c;
+    --surface: #1a1917;
+    --surface2: #242220;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #f0ede8;
+    --muted: #8a8680;
+    --subtle: #4a4845;
+    --gold: #c9a84c;
+    --gold-dim: #7a6530;
+    --blue: #4a8fc4;
+    --blue-dim: #1e3f5a;
+    --green: #4aab78;
+    --green-dim: #1e4a33;
+    --red: #c45a5a;
+    --red-dim: #4a2020;
+    --christian: #b8874a;
+    --christian-bg: rgba(184,135,74,0.12);
+    --islam: #4aab78;
+    --islam-bg: rgba(74,171,120,0.12);
+    --radius: 14px;
+    --card-h: 260px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* Header */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+  }
+
+  .header-title h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  .header-title p {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 2px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.8rem;
+  }
+
+  .stat-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+  }
+
+  .stat-pill .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+  }
+
+  .stat-pill.known .dot { background: var(--green); }
+  .stat-pill.learning .dot { background: var(--red); }
+  .stat-pill.unseen .dot { background: var(--subtle); }
+
+  .stat-pill span.num { color: var(--text); font-weight: 500; }
+
+  /* Main layout */
+  main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* Filters */
+  .filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.75rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  select {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    padding: 9px 14px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 400;
+    cursor: pointer;
+    flex: 1;
+    min-width: 160px;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a8680' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  select:focus { border-color: var(--gold-dim); }
+
+  .btn-shuffle {
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .btn-shuffle:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+  /* Progress bar */
+  .progress-wrap {
+    height: 2px;
+    background: var(--surface2);
+    border-radius: 1px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+  .progress-inner {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 1px;
+    transition: width 0.4s ease;
+    opacity: 0.7;
+  }
+
+  /* Card counter */
+  .card-counter {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+  }
+
+  /* Flashcard */
+  .card-scene {
+    perspective: 1200px;
+    width: 100%;
+    height: var(--card-h);
+    cursor: pointer;
+    margin-bottom: 1.25rem;
+    user-select: none;
+  }
+
+  .card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-inner.flipped { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: var(--radius);
+    border: 1px solid var(--border2);
+    display: flex;
+    flex-direction: column;
+    padding: 1.75rem 2rem;
+    overflow: hidden;
+  }
+
+  .card-front {
+    background: var(--surface);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.75rem;
+  }
+
+  .card-back {
+    background: var(--surface2);
+    transform: rotateY(180deg);
+    justify-content: center;
+    gap: 0;
+  }
+
+  /* Decorative corner on front */
+  .card-front::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 80px; height: 80px;
+    border-radius: 0 var(--radius) 0 80px;
+    opacity: 0.06;
+  }
+
+  .card-front.christian-card::before { background: var(--christian); }
+  .card-front.islam-card::before { background: var(--islam); }
+
+  .religion-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 4px 11px;
+    border-radius: 20px;
+  }
+
+  .religion-badge.christian { background: var(--christian-bg); color: var(--christian); }
+  .religion-badge.islam { background: var(--islam-bg); color: var(--islam); }
+
+  .section-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  .topic-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--text);
+    max-width: 560px;
+  }
+
+  .tap-hint {
+    font-size: 0.7rem;
+    color: var(--subtle);
+    letter-spacing: 0.04em;
+    margin-top: 0.25rem;
+  }
+
+  /* Back face */
+  .quote-block {
+    padding: 0.85rem 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+
+  .quote-block + .quote-block {
+    border-top: 1px solid var(--border);
+  }
+
+  .quote-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+    transition: opacity 0.3s ease;
+  }
+
+  .quote-ref {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: var(--gold);
+    text-transform: uppercase;
+    transition: opacity 0.3s ease;
+  }
+
+  /* Hidden quote state */
+  .quote-block.hidden .quote-text,
+  .quote-block.hidden .quote-ref {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .quote-reveal-btn {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px dashed var(--subtle);
+    border-radius: 8px;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s;
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .quote-reveal-btn:hover {
+    border-color: var(--gold-dim);
+    color: var(--gold);
+    background: rgba(201,168,76,0.05);
+  }
+
+  .quote-block:not(.hidden) .quote-reveal-btn {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .quote-num {
+    font-size: 0.65rem;
+    color: var(--subtle);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  /* Action buttons (after flip) */
+  .action-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.25rem;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
+  }
+
+  .action-row.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+
+  .btn-action {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    background: transparent;
+  }
+
+  .btn-learning {
+    border-color: var(--red-dim);
+    color: var(--red);
+  }
+  .btn-learning:hover { background: var(--red-dim); }
+
+  .btn-known {
+    border-color: var(--green-dim);
+    color: var(--green);
+  }
+  .btn-known:hover { background: var(--green-dim); }
+
+  /* Nav */
+  .nav-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn-nav {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    padding: 11px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+
+  .btn-nav:hover { border-color: var(--border2); color: var(--text); background: var(--surface2); }
+  .btn-nav:disabled { opacity: 0.3; cursor: default; }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+
+  @media (max-width: 520px) {
+    header { padding: 1rem; }
+    main { padding: 1.25rem 1rem 3rem; }
+    .card-face { padding: 1.25rem 1.25rem; }
+    .topic-text { font-size: 0.95rem; }
+    :root { --card-h: 240px; }
+    .header-stats { gap: 1rem; }
+  }
+
+  /* ── NAV TABS ── */
+  .tab-nav {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 5px;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 9px 10px;
+    border-radius: 7px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab-btn.active {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border2);
+  }
+  .tab-btn:hover:not(.active) { color: var(--text); }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── TEST PAPER ── */
+  .test-setup {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .test-setup h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+  }
+  .test-setup p {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+  }
+  .topic-checkboxes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    max-height: 320px;
+    overflow-y: auto;
+    margin-bottom: 1.25rem;
+    padding-right: 4px;
+  }
+  @media (max-width: 520px) { .topic-checkboxes { grid-template-columns: 1fr; } }
+  .topic-check-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    font-size: 0.76rem;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 8px 10px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    transition: all 0.18s;
+    line-height: 1.4;
+  }
+  .topic-check-label:hover { border-color: var(--border2); color: var(--text); }
+  .topic-check-label input[type=checkbox] { accent-color: var(--gold); margin-top: 2px; flex-shrink: 0; }
+  .topic-check-label.selected { border-color: var(--gold-dim); background: rgba(201,168,76,0.07); color: var(--text); }
+  .check-rel-badge {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .check-rel-badge.christian { background: var(--christian-bg); color: var(--christian); }
+  .check-rel-badge.islam { background: var(--islam-bg); color: var(--islam); }
+
+  .test-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .btn-primary {
+    background: var(--gold-dim);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover { background: rgba(201,168,76,0.25); }
+  .btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { color: var(--text); border-color: var(--border2); }
+
+  /* Active test */
+  #test-paper-area { display: none; }
+  .test-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .test-header-bar h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+  }
+  .test-score-display {
+    font-size: 0.8rem;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 14px;
+  }
+  .test-score-display span { color: var(--gold); font-weight: 500; }
+
+  .test-question {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: border-color 0.3s;
+  }
+  .test-question.correct { border-color: var(--green); }
+  .test-question.partial { border-color: var(--gold-dim); }
+  .test-question.wrong { border-color: var(--red-dim); }
+
+  .tq-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .tq-num {
+    font-size: 0.68rem;
+    color: var(--subtle);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .tq-topic {
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+  .tq-prompt {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin-bottom: 0.9rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .tq-prompt span { color: var(--gold); font-style: normal; font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; }
+  .tq-ref { font-size: 0.72rem; color: var(--gold); letter-spacing: 0.04em; margin-bottom: 0.75rem; }
+
+  .tq-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: vertical;
+    min-height: 56px;
+  }
+  .tq-input:focus { border-color: var(--gold-dim); }
+  .tq-input:disabled { opacity: 0.5; }
+
+  .tq-feedback {
+    display: none;
+    margin-top: 0.75rem;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+  .tq-feedback.correct { background: var(--green-dim); color: var(--green); display: block; }
+  .tq-feedback.partial { background: rgba(201,168,76,0.12); color: var(--gold); display: block; }
+  .tq-feedback.wrong { background: var(--red-dim); color: var(--red); display: block; }
+  .tq-correct-ans {
+    margin-top: 6px;
+    font-style: italic;
+    color: var(--text);
+    opacity: 0.8;
+  }
+
+  .test-submit-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .test-results-summary {
+    display: none;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    margin-top: 1.5rem;
+    text-align: center;
+  }
+  .results-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 0.25rem;
+  }
+  .results-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 1.25rem;
+  }
+  .results-breakdown {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .rb-item { font-size: 0.82rem; }
+  .rb-num { font-weight: 500; font-size: 1.1rem; display: block; margin-bottom: 2px; }
+  .rb-item.perfect .rb-num { color: var(--green); }
+  .rb-item.partial .rb-num { color: var(--gold); }
+  .rb-item.wrong .rb-num { color: var(--red); }
+
+  /* ── ESSAY QUESTIONS ── */
+  .essay-setup {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .essay-setup h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    margin-bottom: 0.4rem;
+  }
+  .essay-setup p {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+  }
+  .essay-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .essay-question-area { display: none; }
+  .essay-q-card {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+  }
+  .essay-q-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .mark-badge {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+  .mark-badge.twelve { background: rgba(74,143,196,0.15); color: var(--blue); border: 1px solid rgba(74,143,196,0.3); }
+  .mark-badge.six { background: rgba(201,168,76,0.12); color: var(--gold); border: 1px solid var(--gold-dim); }
+  .essay-q-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    line-height: 1.65;
+    margin-bottom: 0.5rem;
+  }
+  .essay-q-instruction {
+    font-size: 0.76rem;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .essay-textarea {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    line-height: 1.65;
+    outline: none;
+    resize: vertical;
+    min-height: 200px;
+    transition: border-color 0.2s;
+  }
+  .essay-textarea:focus { border-color: var(--gold-dim); }
+  .essay-textarea:disabled { opacity: 0.5; }
+
+  .word-count {
+    text-align: right;
+    font-size: 0.72rem;
+    color: var(--subtle);
+    margin-top: 6px;
+    margin-bottom: 1rem;
+  }
+
+  .essay-submit-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* Marking result */
+  .essay-marking-result {
+    display: none;
+    margin-top: 1.5rem;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .emr-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .emr-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+  }
+  .emr-score-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 6px 14px;
+  }
+  .emr-score-num {
+    font-size: 1.3rem;
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+    color: var(--gold);
+  }
+  .emr-score-denom {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .emr-body {
+    padding: 1.5rem;
+  }
+  .emr-section {
+    margin-bottom: 1.25rem;
+  }
+  .emr-section:last-child { margin-bottom: 0; }
+  .emr-section-title {
+    font-size: 0.7rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  .emr-section-body {
+    font-size: 0.84rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .emr-loading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 1.5rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border2);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .emr-aos { /* assessment objectives chips */
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 0.6rem;
+  }
+  .ao-chip {
+    font-size: 0.7rem;
+    padding: 3px 9px;
+    border-radius: 4px;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+  }
+  .ao-chip.good { border-color: var(--green-dim); color: var(--green); background: var(--green-dim); }
+  .ao-chip.ok { border-color: var(--gold-dim); color: var(--gold); background: rgba(201,168,76,0.08); }
+  .ao-chip.weak { border-color: var(--red-dim); color: var(--red); background: var(--red-dim); }
+
+  .new-question-row {
+    margin-top: 1.25rem;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* ── GRADE HERO ── */
+  .emr-grade-hero {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .emr-grade-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 2rem;
+    min-width: 110px;
+    background: var(--surface);
+  }
+  .emr-grade-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.2rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .emr-grade-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .emr-grade-divider {
+    width: 1px;
+    align-self: stretch;
+    background: var(--border);
+  }
+  .emr-grade-right {
+    flex: 1;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .emr-grade-score-big {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.1;
+  }
+  .emr-grade-score-big .emr-score-denom {
+    font-size: 1rem;
+    color: var(--muted);
+    margin-left: 2px;
+  }
+  .emr-grade-band {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .emr-spag-row {
+    font-size: 0.75rem;
+    color: var(--gold);
+    margin-top: 2px;
+  }
+
+  /* Grade colour overrides */
+  .grade-9 .emr-grade-letter, .grade-8 .emr-grade-letter { color: #4aab78; }
+  .grade-7 .emr-grade-letter { color: #6abeee; }
+  .grade-6 .emr-grade-letter, .grade-5 .emr-grade-letter { color: var(--gold); }
+  .grade-4 .emr-grade-letter { color: #c49a4a; }
+  .grade-3 .emr-grade-letter, .grade-2 .emr-grade-letter, .grade-1 .emr-grade-letter { color: var(--red); }
+
+  /* ── PARAGRAPH BREAKDOWN ── */
+  .emr-para-card {
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    font-size: 0.82rem;
+    line-height: 1.65;
+    border-left: 3px solid transparent;
+  }
+  .emr-para-good {
+    background: rgba(74,171,120,0.08);
+    border-left-color: var(--green);
+  }
+  .emr-para-ok {
+    background: rgba(201,168,76,0.08);
+    border-left-color: var(--gold-dim);
+  }
+  .emr-para-weak {
+    background: rgba(196,90,90,0.08);
+    border-left-color: var(--red);
+  }
+  .emr-para-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .emr-para-label {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .emr-para-rating {
+    font-size: 0.68rem;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .emr-para-rating.good { background: var(--green-dim); color: var(--green); }
+  .emr-para-rating.ok { background: rgba(201,168,76,0.12); color: var(--gold); }
+  .emr-para-rating.weak { background: var(--red-dim); color: var(--red); }
+  .emr-para-text-excerpt {
+    font-style: italic;
+    color: var(--muted);
+    font-size: 0.78rem;
+    margin-bottom: 5px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .emr-para-comment {
+    color: var(--text);
+    font-size: 0.8rem;
+  }
+
+  /* Rewrite buttons */
+  .rewrite-para-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    color: var(--muted);
+    transition: all 0.18s;
+  }
+  .rewrite-para-btn:hover { border-color: var(--gold-dim); color: var(--gold); background: rgba(201,168,76,0.05); }
+  .rewrite-para-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.1); }
+  .emr-rewrite-loading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    padding: 0.75rem 0;
+  }
+
+  /* ── MARK SCHEME REVEAL ── */
+  .btn-markscheme {
+    background: transparent;
+    border: 1px solid var(--blue-dim);
+    color: var(--blue);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-markscheme:hover { background: rgba(74,143,196,0.1); border-color: var(--blue); }
+  .markscheme-panel {
+    display: none;
+    margin-top: 1rem;
+    background: rgba(74,143,196,0.06);
+    border: 1px solid var(--blue-dim);
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+  .markscheme-panel.visible { display: block; }
+  .ms-band-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0 1rem;
+    margin-bottom: 0.75rem;
+    align-items: start;
+  }
+  .ms-band-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--blue);
+    white-space: nowrap;
+    padding-top: 2px;
+  }
+  .ms-band-desc {
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  .ms-spag-note {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── HINT SYSTEM IN TEST ── */
+  .tq-hint-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0.65rem;
+  }
+  .btn-hint {
+    background: transparent;
+    border: 1px solid var(--gold-dim);
+    color: var(--gold);
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.74rem;
+    cursor: pointer;
+    transition: all 0.18s;
+    flex-shrink: 0;
+  }
+  .btn-hint:hover { background: rgba(201,168,76,0.1); }
+  .btn-hint:disabled { opacity: 0.35; cursor: default; }
+  .hint-penalty-note {
+    font-size: 0.7rem;
+    color: var(--subtle);
+    font-style: italic;
+  }
+  .hint-active-notice {
+    font-size: 0.72rem;
+    color: var(--gold);
+    background: rgba(201,168,76,0.1);
+    border: 1px solid var(--gold-dim);
+    border-radius: 5px;
+    padding: 3px 9px;
+    display: none;
+  }
+  .hint-active-notice.visible { display: inline; }
+
+  .tq-hint-blanks {
+    display: none;
+    margin-bottom: 0.65rem;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--muted);
+    padding: 8px 12px;
+    background: var(--surface2);
+    border-radius: 6px;
+    border: 1px dashed var(--gold-dim);
+  }
+  .tq-hint-blanks.visible { display: block; }
+  .blank-word {
+    display: inline-block;
+    min-width: 60px;
+    border-bottom: 1.5px solid var(--gold-dim);
+    margin: 0 3px;
+    vertical-align: bottom;
+  }
+  .tq-blank-inputs {
+    display: none;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 0.65rem;
+  }
+  .tq-blank-inputs.visible { display: flex; }
+  .blank-input-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .blank-input {
+    background: var(--surface2);
+    border: 1px solid var(--gold-dim);
+    border-radius: 5px;
+    padding: 4px 8px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    outline: none;
+    transition: border-color 0.2s;
+    min-width: 80px;
+    text-align: center;
+  }
+  .blank-input:focus { border-color: var(--gold); }
+  .blank-input:disabled { opacity: 0.5; }
+  .blank-input-label {
+    font-size: 0.6rem;
+    color: var(--subtle);
+    letter-spacing: 0.03em;
+  }
+
+  /* ── AI QUESTION GENERATION ── */
+  .essay-gen-loading {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 1.25rem 0;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  .essay-gen-loading.visible { display: flex; }
+
+  /* ── CONFIDENCE RANKING ── */
+  .ranking-header-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .rank-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: border-color 0.2s;
+  }
+  .rank-item:hover { border-color: var(--border2); }
+  .rank-pos {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--subtle);
+    min-width: 28px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .rank-pos.top { color: var(--gold); }
+  .rank-pos.bottom { color: var(--red); }
+  .rank-body { flex: 1; min-width: 0; }
+  .rank-topic {
+    font-size: 0.84rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .rank-section-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+    margin-bottom: 6px;
+  }
+  .rank-bar-wrap {
+    height: 5px;
+    background: var(--surface2);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 5px;
+  }
+  .rank-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+  }
+  .rank-bar-fill.high { background: var(--green); }
+  .rank-bar-fill.mid { background: var(--gold); }
+  .rank-bar-fill.low { background: var(--red); }
+  .rank-source-pills {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+  .rank-pill {
+    font-size: 0.66rem;
+    padding: 2px 7px;
+    border-radius: 4px;
+    letter-spacing: 0.03em;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .rank-pill.has-data { border-color: var(--border2); }
+  .rank-source-dot {
+    width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+  }
+  .rank-source-dot.flashcard { background: var(--blue); }
+  .rank-source-dot.quotetest { background: var(--gold); }
+  .rank-source-dot.essay { background: var(--green); }
+  .rank-score-label {
+    font-size: 0.72rem;
+    font-weight: 500;
+    min-width: 36px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .rank-score-label.high { color: var(--green); }
+  .rank-score-label.mid { color: var(--gold); }
+  .rank-score-label.low { color: var(--red); }
+  .rank-score-label.none { color: var(--subtle); }
+  .rank-unseen-banner {
+    background: var(--surface2);
+    border: 1px dashed var(--subtle);
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    font-size: 0.75rem;
+    color: var(--subtle);
+    margin-top: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .ranking-legend {
+    display: flex;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .rank-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-title">
+    <h1>GCSE RS — AQA Spec A</h1>
+    <p>Christianity &amp; Islam · Quotes Flashcards</p>
+  </div>
+  <div class="header-stats">
+    <div class="stat-pill known"><div class="dot"></div>Known <span class="num" id="hdr-known">0</span></div>
+    <div class="stat-pill learning"><div class="dot"></div>Learning <span class="num" id="hdr-learn">0</span></div>
+    <div class="stat-pill unseen"><div class="dot"></div>Unseen <span class="num" id="hdr-unseen">40</span></div>
+  </div>
+</header>
+
+<main>
+  <!-- Tab nav -->
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('flashcards')">📚 Flashcards</button>
+    <button class="tab-btn" onclick="switchTab('test')">📝 Quote Test</button>
+    <button class="tab-btn" onclick="switchTab('essay')">✍️ Essay Questions</button>
+    <button class="tab-btn" onclick="switchTab('ranking')">📊 Confidence</button>
+  </div>
+
+  <!-- ══ TAB 1: FLASHCARDS ══ -->
+  <div class="tab-panel active" id="panel-flashcards">
+    <div class="filters">
+      <select id="filter-rel">
+        <option value="all">All religions</option>
+        <option value="christianity">Christianity</option>
+        <option value="islam">Islam</option>
+      </select>
+      <select id="filter-section"></select>
+      <button class="btn-shuffle" id="btn-shuffle">⇄ Shuffle</button>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-inner" id="progress-bar" style="width: 2.5%"></div>
+    </div>
+
+    <div class="card-counter" id="card-counter">Card 1 of 40</div>
+
+    <div class="card-scene" id="card-scene" onclick="flipCard()">
+      <div class="card-inner" id="card-inner">
+        <div class="card-face card-front" id="card-front">
+          <span class="religion-badge" id="front-badge">Christianity</span>
+          <div class="section-label" id="front-section">Beliefs — Nature of God</div>
+          <div class="topic-text" id="front-topic"></div>
+          <div class="tap-hint">tap to flip, then reveal each quote</div>
+        </div>
+        <div class="card-face card-back" id="card-back">
+          <div class="quote-block hidden" id="qblock-1">
+            <div class="quote-num">Quote 1</div>
+            <div class="quote-text" id="back-q1"></div>
+            <div class="quote-ref" id="back-r1"></div>
+            <button class="quote-reveal-btn" onclick="revealQuote(event,1)">Tap to reveal quote 1</button>
+          </div>
+          <div class="quote-block hidden" id="qblock-2">
+            <div class="quote-num">Quote 2</div>
+            <div class="quote-text" id="back-q2"></div>
+            <div class="quote-ref" id="back-r2"></div>
+            <button class="quote-reveal-btn" onclick="revealQuote(event,2)">Tap to reveal quote 2</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-row" id="action-row">
+      <button class="btn-action btn-learning" onclick="markCard(false)">Still learning</button>
+      <button class="btn-action btn-known" onclick="markCard(true)">Got it ✓</button>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-nav" id="btn-prev" onclick="prevCard()" disabled>← Previous</button>
+      <button class="btn-nav" id="btn-next" onclick="nextCard()">Next →</button>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#b8874a"></div>Christianity</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#4aab78"></div>Islam</div>
+      <div class="legend-item" style="color:#4a4845; font-size:0.72rem;">40 topics · 2 quotes each · flip then reveal each quote</div>
+    </div>
+  </div><!-- /panel-flashcards -->
+
+  <!-- ══ TAB 2: QUOTE TEST PAPER ══ -->
+  <div class="tab-panel" id="panel-test">
+    <div class="test-setup" id="test-setup-area">
+      <h2>Quote Test Paper</h2>
+      <p>Select the topics you want to be tested on. A randomised paper will be generated — type each quote from memory. Exact match = 2 marks, close match = 1 mark.</p>
+
+      <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+        <button class="btn-secondary" style="font-size:0.75rem;padding:6px 12px;" onclick="selectAllTopics(true)">Select all</button>
+        <button class="btn-secondary" style="font-size:0.75rem;padding:6px 12px;" onclick="selectAllTopics(false)">Deselect all</button>
+        <button class="btn-secondary" style="font-size:0.75rem;padding:6px 12px;" onclick="selectReligion('christianity')">Christianity only</button>
+        <button class="btn-secondary" style="font-size:0.75rem;padding:6px 12px;" onclick="selectReligion('islam')">Islam only</button>
+      </div>
+
+      <div class="topic-checkboxes" id="topic-checkboxes"></div>
+
+      <div class="test-controls">
+        <button class="btn-primary" onclick="generateTestPaper()">Generate Test Paper →</button>
+        <span style="font-size:0.78rem;color:var(--muted);" id="test-topic-count">0 topics selected</span>
+      </div>
+    </div>
+
+    <div id="test-paper-area">
+      <div class="test-header-bar">
+        <h2>Quote Test Paper</h2>
+        <div class="test-score-display">Score: <span id="live-score">0</span> / <span id="live-max">0</span></div>
+      </div>
+      <div id="test-questions-container"></div>
+      <div class="test-submit-row">
+        <button class="btn-primary" id="btn-submit-test" onclick="submitTestPaper()">Mark All Answers</button>
+        <button class="btn-secondary" onclick="resetTestPaper()">← New Test</button>
+      </div>
+      <div class="test-results-summary" id="test-results-summary">
+        <div class="results-score" id="final-score-display">0/0</div>
+        <div class="results-label">Total Score</div>
+        <div class="results-breakdown">
+          <div class="rb-item perfect"><span class="rb-num" id="rb-perfect">0</span>Perfect (2/2)</div>
+          <div class="rb-item partial"><span class="rb-num" id="rb-partial">0</span>Close (1/2)</div>
+          <div class="rb-item wrong"><span class="rb-num" id="rb-wrong">0</span>Missed (0/2)</div>
+        </div>
+        <div style="margin-top:1.5rem;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <button class="btn-primary" onclick="resetTestPaper()">New Test</button>
+          <button class="btn-secondary" onclick="reviewAnswers()">Review Answers</button>
+        </div>
+      </div>
+    </div>
+  </div><!-- /panel-test -->
+
+  <!-- ══ TAB 3: ESSAY QUESTIONS ══ -->
+  <div class="tab-panel" id="panel-essay">
+    <div class="essay-setup">
+      <h2>AQA Essay Questions</h2>
+      <p>Generate a random AQA-style 12-mark or 6-mark question for any topic. Write your answer and get it marked against AQA GCSE mark scheme criteria using AI.</p>
+      <div class="essay-controls">
+        <select id="essay-rel-filter" style="max-width:200px;">
+          <option value="all">All religions</option>
+          <option value="christianity">Christianity</option>
+          <option value="islam">Islam</option>
+        </select>
+        <select id="essay-section-filter" style="max-width:240px;"></select>
+        <select id="essay-mark-type" style="max-width:160px;">
+          <option value="random">Random (6 or 12)</option>
+          <option value="12">12-mark question</option>
+          <option value="6">6-mark question</option>
+        </select>
+        <button class="btn-primary" onclick="generateEssayQuestion()">Generate Question →</button>
+      </div>
+    </div>
+
+    <div class="essay-gen-loading" id="essay-gen-loading">
+      <div class="spinner"></div>
+      Generating a new AQA-style question…
+    </div>
+
+    <div class="essay-question-area" id="essay-question-area">
+      <div class="essay-q-card">
+        <div class="essay-q-meta">
+          <span class="mark-badge" id="essay-mark-badge">12 marks</span>
+          <span class="religion-badge" id="essay-rel-badge" style="font-size:0.68rem;padding:3px 10px;">Christianity</span>
+          <span style="font-size:0.72rem;color:var(--muted);" id="essay-topic-label"></span>
+        </div>
+        <div class="essay-q-text" id="essay-q-text"></div>
+        <div class="essay-q-instruction" id="essay-q-instruction"></div>
+        <textarea class="essay-textarea" id="essay-answer" placeholder="Write your answer here…" oninput="updateWordCount()"></textarea>
+        <div class="word-count" id="word-count">0 words</div>
+        <div class="essay-submit-row">
+          <button class="btn-primary" id="btn-mark-essay" onclick="markEssay()">Mark My Answer →</button>
+          <button class="btn-secondary" onclick="generateEssayQuestion()">New Question</button>
+        </div>
+      </div>
+
+      <div class="essay-marking-result" id="essay-marking-result">
+        <div class="emr-loading" id="emr-loading">
+          <div class="spinner"></div>
+          Marking your answer against AQA criteria…
+        </div>
+        <div id="emr-content" style="display:none;">
+          <!-- Grade hero -->
+          <div class="emr-grade-hero" id="emr-grade-hero">
+            <div class="emr-grade-left">
+              <div class="emr-grade-letter" id="emr-grade-letter">B</div>
+              <div class="emr-grade-label">GCSE Grade</div>
+            </div>
+            <div class="emr-grade-divider"></div>
+            <div class="emr-grade-right">
+              <div class="emr-grade-score-big">
+                <span id="emr-score-num">—</span><span class="emr-score-denom" id="emr-score-denom">/ 12</span>
+              </div>
+              <div class="emr-grade-band" id="emr-grade-band-label">Band 3</div>
+              <div class="emr-spag-row" id="emr-spag-row" style="display:none;">
+                + <span id="emr-spag-num">0</span>/3 SPaG
+              </div>
+            </div>
+          </div>
+
+          <div class="emr-body">
+            <!-- Band justification -->
+            <div class="emr-section">
+              <div class="emr-section-title">Why this grade?</div>
+              <div class="emr-section-body" id="emr-band"></div>
+            </div>
+
+            <!-- AO chips -->
+            <div class="emr-section">
+              <div class="emr-section-title">Assessment Objectives</div>
+              <div class="emr-aos" id="emr-aos"></div>
+            </div>
+
+            <!-- Strengths -->
+            <div class="emr-section">
+              <div class="emr-section-title">✓ What you did well</div>
+              <div class="emr-section-body" id="emr-strengths"></div>
+            </div>
+
+            <!-- Paragraph breakdown -->
+            <div class="emr-section" id="emr-para-section">
+              <div class="emr-section-title">Paragraph-by-paragraph breakdown</div>
+              <div id="emr-para-breakdown"></div>
+            </div>
+
+            <!-- Improvements -->
+            <div class="emr-section">
+              <div class="emr-section-title">⚠ Areas to improve</div>
+              <div class="emr-section-body" id="emr-improvements"></div>
+            </div>
+
+            <!-- Rewrite weak sections -->
+            <div class="emr-section" id="emr-rewrite-section" style="display:none;">
+              <div class="emr-section-title">Rewrite a weak section</div>
+              <p style="font-size:0.8rem;color:var(--muted);margin-bottom:0.75rem;">Select a paragraph below and the AI will show you how to improve just that part.</p>
+              <div id="emr-rewrite-para-buttons"></div>
+              <div id="emr-rewrite-area" style="display:none;margin-top:1rem;">
+                <div class="emr-rewrite-loading" id="emr-rewrite-loading" style="display:none;">
+                  <div class="spinner"></div> Rewriting paragraph…
+                </div>
+                <div id="emr-rewrite-result" style="display:none;">
+                  <div class="emr-section-title" style="margin-bottom:0.5rem;">Your original paragraph</div>
+                  <div class="emr-para-card emr-para-weak" id="emr-orig-para-text" style="margin-bottom:1rem;"></div>
+                  <div class="emr-section-title" style="margin-bottom:0.5rem;">Improved version</div>
+                  <div class="emr-para-card emr-para-good" id="emr-improved-para-text" style="margin-bottom:0.5rem;"></div>
+                  <div style="font-size:0.76rem;color:var(--muted);" id="emr-rewrite-explanation"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Model points -->
+            <div class="emr-section">
+              <div class="emr-section-title">What a top-band answer would include</div>
+              <div class="emr-section-body" id="emr-model"></div>
+            </div>
+
+            <!-- Mark scheme reveal (12-mark only) -->
+            <div class="emr-section" id="emr-markscheme-section" style="display:none;">
+              <button class="btn-markscheme" onclick="toggleMarkScheme()">
+                <span id="ms-btn-icon">📋</span> <span id="ms-btn-label">Show AQA Mark Scheme</span>
+              </button>
+              <div class="markscheme-panel" id="markscheme-panel">
+                <div style="font-size:0.7rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--blue);margin-bottom:0.9rem;font-weight:500;">AQA 12-Mark Evaluation Mark Scheme (AO1 + AO2)</div>
+                <div class="ms-band-row">
+                  <div class="ms-band-label">Band 4<br/>10–12</div>
+                  <div class="ms-band-desc">An excellent, well-developed and well-organised response. Thorough knowledge of religion and belief with accurate and relevant detail. A range of views considered with analysis and evaluation that is well-structured and well-reasoned. A clear and well-substantiated conclusion. A detailed, coherent and reasoned response.</div>
+                </div>
+                <div class="ms-band-row">
+                  <div class="ms-band-label">Band 3<br/>7–9</div>
+                  <div class="ms-band-desc">A good response showing analysis and some evaluation. Good knowledge of religion and belief with generally accurate and relevant material. A range of views given with some analysis. A conclusion given that is supported by some justification. A generally coherent response with a line of reasoning.</div>
+                </div>
+                <div class="ms-band-row">
+                  <div class="ms-band-label">Band 2<br/>4–6</div>
+                  <div class="ms-band-desc">A limited response with some explanation. Some knowledge of religion and belief. A range of views may have been attempted with limited analysis and minimal evaluation. A conclusion may be present but with little justification. Some consistency but lacking development.</div>
+                </div>
+                <div class="ms-band-row">
+                  <div class="ms-band-label">Band 1<br/>1–3</div>
+                  <div class="ms-band-desc">A weak response with little relevant knowledge of religion and belief. Views may be stated with little support. No or very little evaluation. Little consistency or development.</div>
+                </div>
+                <div class="ms-band-row">
+                  <div class="ms-band-label">Band 0<br/>0</div>
+                  <div class="ms-band-desc">Nothing worthy of credit.</div>
+                </div>
+                <div class="ms-spag-note">
+                  <strong style="color:var(--blue);">SPaG — separate 3 marks</strong> (awarded if essay score &ge; 5):<br>
+                  <strong>3 marks</strong> — Spelling, punctuation and grammar used with consistent accuracy. Specialist terminology used with precision.<br>
+                  <strong>2 marks</strong> — Generally accurate with occasional errors. Specialist terminology used with some accuracy.<br>
+                  <strong>1 mark</strong> — Some accuracy in spelling, punctuation and grammar. Limited use of specialist terminology.<br>
+                  <strong>0 marks</strong> — Not worthy of credit or essay score below 5.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="new-question-row">
+        <button class="btn-secondary" onclick="generateEssayQuestion()">← Generate Another Question</button>
+      </div>
+    </div>
+  </div><!-- /panel-essay -->
+  <!-- ══ TAB 4: CONFIDENCE RANKING ══ -->
+  <div class="tab-panel" id="panel-ranking">
+    <div class="ranking-header-card">
+      <div>
+        <h2 style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;margin-bottom:0.3rem;">Topic Confidence Ranking</h2>
+        <p style="font-size:0.78rem;color:var(--muted);">Built from your flashcard results, quote test scores, and essay marks. Keep practising to fill in gaps.</p>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <select id="ranking-filter-rel" style="max-width:180px;" onchange="renderRanking()">
+          <option value="all">All religions</option>
+          <option value="christianity">Christianity</option>
+          <option value="islam">Islam</option>
+        </select>
+        <button class="btn-secondary" onclick="clearConfidenceData()">Reset data</button>
+      </div>
+    </div>
+
+    <div id="ranking-empty" style="display:none;text-align:center;padding:3rem 1rem;color:var(--muted);font-size:0.85rem;">
+      <div style="font-size:2rem;margin-bottom:0.75rem;">📊</div>
+      No activity recorded yet. Complete some flashcards, quote tests or essay questions to see your ranking here.
+    </div>
+
+    <div id="ranking-list"></div>
+
+    <div class="ranking-legend">
+      <div class="rank-legend-item"><span class="rank-source-dot flashcard"></span>Flashcards</div>
+      <div class="rank-legend-item"><span class="rank-source-dot quotetest"></span>Quote Test</div>
+      <div class="rank-legend-item"><span class="rank-source-dot essay"></span>Essay marks</div>
+    </div>
+  </div><!-- /panel-ranking -->
+
+</main>
+
+<script>
+// ══════════════════════════════════════════
+// TAB NAVIGATION
+// ══════════════════════════════════════════
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    const tabs = ['flashcards','test','essay','ranking'];
+    b.classList.toggle('active', tabs[i] === tab);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  if (tab === 'test' && document.getElementById('topic-checkboxes').children.length === 0) buildTopicCheckboxes();
+  if (tab === 'essay') buildEssaySectionFilter();
+  if (tab === 'ranking') renderRanking();
+}
+
+// ══════════════════════════════════════════
+// FLASHCARD DATA
+// ══════════════════════════════════════════
+const ALL_CARDS = [
+  {rel:"christianity",section:"Beliefs — Nature of God",topic:"God as omnipotent, loving and just, and the problem of evil and suffering",q1:"God is love, and whoever abides in love abides in God, and God abides in him.",r1:"1 John 4:16",q2:"Is anything too hard for the Lord?",r2:"Genesis 18:14"},
+  {rel:"christianity",section:"Beliefs — Nature of God",topic:"The oneness of God and the Trinity: Father, Son and Holy Spirit",q1:"Go and make disciples of all nations, baptising them in the name of the Father and of the Son and of the Holy Spirit.",r1:"Matthew 28:19",q2:"Hear, O Israel: The Lord our God, the Lord is one.",r2:"Deuteronomy 6:4"},
+  {rel:"christianity",section:"Beliefs — Nature of God",topic:"Different Christian beliefs about creation including the role of Word and Spirit (John 1:1-3 and Genesis 1:1-3)",q1:"In the beginning was the Word, and the Word was with God, and the Word was God.",r1:"John 1:1",q2:"In the beginning God created the heavens and the earth.",r2:"Genesis 1:1"},
+  {rel:"christianity",section:"Beliefs — Nature of God",topic:"Different Christian beliefs about the afterlife: resurrection, judgement, heaven and hell",q1:"I am the resurrection and the life. The one who believes in me will live, even though they die.",r1:"John 11:25",q2:"The righteous will go into eternal life.",r2:"Matthew 25:46"},
+  {rel:"christianity",section:"Beliefs — Jesus & Salvation",topic:"The incarnation and Jesus as the Son of God",q1:"The Word became flesh and made his dwelling among us.",r1:"John 1:14",q2:"You are my Son, whom I love; with you I am well pleased.",r2:"Luke 3:22"},
+  {rel:"christianity",section:"Beliefs — Jesus & Salvation",topic:"The crucifixion, resurrection and ascension",q1:"Christ died for our sins according to the Scriptures, and was raised on the third day.",r1:"1 Corinthians 15:3-4",q2:"He was taken up before their very eyes, and a cloud hid him from their sight.",r2:"Acts 1:9"},
+  {rel:"christianity",section:"Beliefs — Jesus & Salvation",topic:"Sin, including original sin",q1:"All have sinned and fall short of the glory of God.",r1:"Romans 3:23",q2:"Death came to all people, because all sinned.",r2:"Romans 5:12"},
+  {rel:"christianity",section:"Beliefs — Jesus & Salvation",topic:"The means of salvation: law, grace and Spirit",q1:"It is by grace you have been saved, through faith — it is the gift of God.",r1:"Ephesians 2:8",q2:"The law of the Spirit who gives life has set you free from the law of sin and death.",r2:"Romans 8:2"},
+  {rel:"christianity",section:"Beliefs — Jesus & Salvation",topic:"The role of Christ in salvation including atonement",q1:"God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish.",r1:"John 3:16",q2:"Christ redeemed us from the curse of the law by becoming a curse for us.",r2:"Galatians 3:13"},
+  {rel:"christianity",section:"Practices — Worship & Festivals",topic:"Different forms of worship: liturgical, non-liturgical and informal, including use of the Bible",q1:"God is spirit, and his worshippers must worship in the Spirit and in truth.",r1:"John 4:24",q2:"Let the word of Christ dwell in you richly, teaching and admonishing one another in all wisdom.",r2:"Colossians 3:16"},
+  {rel:"christianity",section:"Practices — Worship & Festivals",topic:"Private worship",q1:"When you pray, go into your room, close the door and pray to your Father, who is unseen.",r1:"Matthew 6:6",q2:"Rejoice always, pray continually, give thanks in all circumstances.",r2:"1 Thessalonians 5:16-18"},
+  {rel:"christianity",section:"Practices — Worship & Festivals",topic:"Prayer and its significance, including the Lord's Prayer, set prayers and informal prayer",q1:"Our Father in heaven, hallowed be your name, your kingdom come, your will be done.",r1:"Matthew 6:9-10",q2:"Ask and it will be given to you; seek and you will find.",r2:"Matthew 7:7"},
+  {rel:"christianity",section:"Practices — Worship & Festivals",topic:"The meaning of sacrament",q1:"You are the body of Christ, and each one of you is a part of it.",r1:"1 Corinthians 12:27",q2:"Do this in remembrance of me.",r2:"Luke 22:19"},
+  {rel:"christianity",section:"Practices — Worship & Festivals",topic:"Baptism and its significance; infant and believers' baptism; different beliefs about infant baptism",q1:"Repent and be baptised, every one of you, in the name of Jesus Christ for the forgiveness of your sins.",r1:"Acts 2:38",q2:"Whoever believes and is baptised will be saved.",r2:"Mark 16:16"},
+  {rel:"christianity",section:"Practices — Worship & Festivals",topic:"Holy Communion / Eucharist and its significance; different ways it is celebrated",q1:"This is my body, which is given for you.",r1:"Luke 22:19",q2:"Whenever you eat this bread and drink this cup, you proclaim the Lord's death until he comes.",r2:"1 Corinthians 11:26"},
+  {rel:"christianity",section:"Practices — Worship & Festivals",topic:"The role and importance of pilgrimage: Lourdes and Iona",q1:"Blessed are those whose strength is in you, whose hearts are set on pilgrimage.",r1:"Psalm 84:5",q2:"How lovely is your dwelling place, Lord Almighty! My soul yearns for the courts of the Lord.",r2:"Psalm 84:1-2"},
+  {rel:"christianity",section:"Practices — Worship & Festivals",topic:"Christmas and Easter and their importance for Christians in Great Britain today",q1:"Today in the town of David a Saviour has been born to you; he is the Messiah, the Lord.",r1:"Luke 2:11",q2:"He is not here; he has risen, just as he said.",r2:"Matthew 28:6"},
+  {rel:"christianity",section:"Practices — Role of the Church",topic:"The role of the Church in the local community, including food banks and street pastors",q1:"Whatever you did for one of the least of these brothers and sisters of mine, you did for me.",r1:"Matthew 25:40",q2:"Love your neighbour as yourself.",r2:"Mark 12:31"},
+  {rel:"christianity",section:"Practices — Role of the Church",topic:"The place of mission, evangelism and Church growth",q1:"Go into all the world and preach the gospel to all creation.",r1:"Mark 16:15",q2:"You will be my witnesses in Jerusalem, and in all Judea and Samaria, and to the ends of the earth.",r2:"Acts 1:8"},
+  {rel:"christianity",section:"Practices — Role of the Church",topic:"Working for reconciliation",q1:"Blessed are the peacemakers, for they will be called children of God.",r1:"Matthew 5:9",q2:"God gave us the ministry of reconciliation.",r2:"2 Corinthians 5:18"},
+  {rel:"christianity",section:"Practices — Role of the Church",topic:"How Christian churches respond to persecution",q1:"Blessed are those who are persecuted because of righteousness, for theirs is the kingdom of heaven.",r1:"Matthew 5:10",q2:"Do not be afraid of those who kill the body but cannot kill the soul.",r2:"Matthew 10:28"},
+  {rel:"christianity",section:"Practices — Role of the Church",topic:"The work of CAFOD, Christian Aid, or Tearfund",q1:"Faith by itself, if it is not accompanied by action, is dead.",r1:"James 2:17",q2:"What does the Lord require of you? To act justly and to love mercy.",r2:"Micah 6:8"},
+  {rel:"islam",section:"Beliefs — Key Beliefs",topic:"The six articles of faith (Sunni) and five roots of Usul ad-Din (Shi'a), including key similarities and differences",q1:"Each one believes in Allah, His angels, His books, and His messengers.",r1:"Qur'an 2:285",q2:"Righteousness is to believe in Allah, the Last Day, the angels, the Book, and the prophets.",r2:"Qur'an 2:177"},
+  {rel:"islam",section:"Beliefs — Key Beliefs",topic:"Tawhid (the Oneness of God), Qur'an Surah 112",q1:"Say: He is Allah, the One. Allah, the Eternal, Absolute. He begets not, nor is He begotten.",r1:"Qur'an 112:1-4 (Surah Al-Ikhlas)",q2:"Your God is one God; there is no god but Him, the Most Gracious, the Most Merciful.",r2:"Qur'an 2:163"},
+  {rel:"islam",section:"Beliefs — Key Beliefs",topic:"The nature of God: omnipotence, beneficence, mercy, fairness/justice (Adalat); immanence and transcendence",q1:"He is the First and the Last, the Most High and the Most Near, and He has full knowledge of all things.",r1:"Qur'an 57:3",q2:"Allah is the Most Gracious, the Most Merciful.",r2:"Qur'an 1:1 (Basmala)"},
+  {rel:"islam",section:"Beliefs — Key Beliefs",topic:"Angels, their nature and role, including Jibril and Mika'il",q1:"He sends down His angels with the inspiration of His command to whom He wills of His servants.",r1:"Qur'an 16:2",q2:"Whoever is an enemy to Allah and His angels and Jibril and Mika'il — then indeed, Allah is an enemy to the disbelievers.",r2:"Qur'an 2:98"},
+  {rel:"islam",section:"Beliefs — Key Beliefs",topic:"Predestination (Al-Qadr) and human free will",q1:"Indeed, everything have We created in precise measure.",r1:"Qur'an 54:49",q2:"Whoever wills, let him take a path to his Lord.",r2:"Qur'an 73:19"},
+  {rel:"islam",section:"Beliefs — Key Beliefs",topic:"Akhirah: Muslim beliefs about life after death",q1:"Every soul shall taste death, and you will only be given your full recompense on the Day of Resurrection.",r1:"Qur'an 3:185",q2:"Whoever has done a grain's weight of good will see it, and whoever has done a grain's weight of evil will see it.",r2:"Qur'an 99:7-8"},
+  {rel:"islam",section:"Beliefs — Authority",topic:"Prophethood (Risalah): the nature and importance of prophethood; Ibrahim and Muhammad",q1:"Muhammad is not the father of any of your men, but he is the Messenger of Allah and the last of the prophets.",r1:"Qur'an 33:40",q2:"We have sent you as a mercy to all the worlds.",r2:"Qur'an 21:107"},
+  {rel:"islam",section:"Beliefs — Authority",topic:"The Holy Books: the Qur'an — revelation and authority; Torah, Psalms, Gospel and their authority",q1:"This is the Book about which there is no doubt, a guidance for those conscious of Allah.",r1:"Qur'an 2:2",q2:"Indeed, it is We who sent down the Qur'an and indeed, We will be its guardian.",r2:"Qur'an 15:9"},
+  {rel:"islam",section:"Beliefs — Authority",topic:"The Imamate in Shi'a Islam: its role and significance",q1:"Obey Allah and obey the Messenger, and those in authority among you.",r1:"Qur'an 4:59",q2:"None of you truly believes until I am more beloved to him than his father, his children, and all of mankind.",r2:"Hadith, Sahih al-Bukhari 15"},
+  {rel:"islam",section:"Practices — Five Pillars",topic:"Shahadah: declaration of faith and its place in Muslim practice",q1:"There is no god but Allah, and Muhammad is the Messenger of Allah.",r1:"The Shahadah",q2:"So know that there is no god but Allah, and ask forgiveness for your sin.",r2:"Qur'an 47:19"},
+  {rel:"islam",section:"Practices — Five Pillars",topic:"Salah and its significance: how and why Muslims pray, including wudu, rak'ahs; Sunni and Shi'a differences",q1:"Indeed, prayer has been decreed upon the believers a decree of specified times.",r1:"Qur'an 4:103",q2:"Guard strictly the prayers, especially the middle prayer. And stand before Allah devoutly obedient.",r2:"Qur'an 2:238"},
+  {rel:"islam",section:"Practices — Five Pillars",topic:"Sawm: the fast of Ramadan including its significance and the Night of Power (Laylat al-Qadr)",q1:"Fasting is prescribed for you as it was prescribed for those before you, that you may achieve taqwa.",r1:"Qur'an 2:183",q2:"The Night of Decree is better than a thousand months.",r2:"Qur'an 97:3"},
+  {rel:"islam",section:"Practices — Five Pillars",topic:"Zakah: giving alms — origins, how and why it is given, benefits; Khums in Shi'a Islam",q1:"Establish prayer and give zakah, and whatever good you put forward for yourselves — you will find it with Allah.",r1:"Qur'an 2:110",q2:"Take from their wealth a charity to purify them and cause them increase.",r2:"Qur'an 9:103"},
+  {rel:"islam",section:"Practices — Five Pillars",topic:"Hajj: pilgrimage to Makkah — origins, how it is performed, Ka'aba, Mina, Arafat, Muzdalifah",q1:"Proclaim to the people the Hajj; they will come to you on foot and on every lean camel from every distant pass.",r1:"Qur'an 22:27",q2:"Complete the Hajj and umrah for Allah.",r2:"Qur'an 2:196"},
+  {rel:"islam",section:"Practices — Five Pillars",topic:"Jihad: greater and lesser jihad — meaning, significance, origins and conditions for lesser jihad",q1:"Permission to fight is given to those who are fought against because they have been wronged.",r1:"Qur'an 22:39",q2:"Fight in the way of Allah against those who fight you, but do not transgress.",r2:"Qur'an 2:190"},
+  {rel:"islam",section:"Practices — Festivals",topic:"Id-ul-Adha: origins and meaning",q1:"O Ibrahim! You have fulfilled the vision. Indeed, We thus reward the doers of good.",r1:"Qur'an 37:104-105",q2:"Their meat will not reach Allah, nor will their blood, but what reaches Him is piety from you.",r2:"Qur'an 22:37"},
+  {rel:"islam",section:"Practices — Festivals",topic:"Id-ul-Fitr: origins and meaning",q1:"He wants for you ease and does not want hardship for you.",r1:"Qur'an 2:185",q2:"Complete the fast, then glorify Allah for having guided you, and perhaps you will be grateful.",r2:"Qur'an 2:185"},
+  {rel:"islam",section:"Practices — Festivals",topic:"Ashura: origins and meaning",q1:"We took the Children of Israel across the sea, and Pharaoh and his soldiers followed them in tyranny.",r1:"Qur'an 10:90",q2:"This is a day on which Moses fasted as gratitude to Allah, so we also fast on this day.",r2:"Hadith, Sahih al-Bukhari 3943"},
+];
+
+let deck = [...ALL_CARDS];
+let idx = 0;
+let isFlipped = false;
+let known = new Set();
+let learning = new Set();
+let seen = new Set();
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+}
+
+function buildSections() {
+  const rel = document.getElementById('filter-rel').value;
+  const sel = document.getElementById('filter-section');
+  const prev = sel.value;
+  sel.innerHTML = '<option value="all">All sections</option>';
+  const secs = [...new Set(ALL_CARDS.filter(c => rel === 'all' || c.rel === rel).map(c => c.section))];
+  secs.forEach(s => {
+    const o = document.createElement('option');
+    o.value = s; o.textContent = s; sel.appendChild(o);
+  });
+  sel.value = secs.includes(prev) ? prev : 'all';
+}
+
+function applyFilters() {
+  const rel = document.getElementById('filter-rel').value;
+  const sec = document.getElementById('filter-section').value;
+  deck = ALL_CARDS.filter(c => (rel === 'all' || c.rel === rel) && (sec === 'all' || c.section === sec));
+  idx = 0; seen.clear(); known.clear(); learning.clear();
+  render(false);
+}
+
+function render(wasFlipped) {
+  const c = deck[idx];
+  const ci = document.getElementById('card-inner');
+  if (wasFlipped) { ci.classList.remove('flipped'); isFlipped = false; }
+  document.getElementById('action-row').classList.remove('visible');
+  document.getElementById('qblock-1').classList.add('hidden');
+  document.getElementById('qblock-2').classList.add('hidden');
+
+  const isChristian = c.rel === 'christianity';
+  const badgeClass = isChristian ? 'christian' : 'islam';
+  const badgeLabel = isChristian ? 'Christianity' : 'Islam';
+  const frontFace = document.getElementById('card-front');
+  frontFace.className = 'card-face card-front ' + (isChristian ? 'christian-card' : 'islam-card');
+
+  document.getElementById('front-badge').textContent = badgeLabel;
+  document.getElementById('front-badge').className = 'religion-badge ' + badgeClass;
+  document.getElementById('front-section').textContent = c.section;
+  document.getElementById('front-topic').textContent = c.topic;
+  document.getElementById('back-q1').textContent = '\u201C' + c.q1 + '\u201D';
+  document.getElementById('back-r1').textContent = c.r1;
+  document.getElementById('back-q2').textContent = '\u201C' + c.q2 + '\u201D';
+  document.getElementById('back-r2').textContent = c.r2;
+
+  const total = deck.length;
+  document.getElementById('card-counter').textContent = 'Card ' + (idx + 1) + ' of ' + total;
+  document.getElementById('progress-bar').style.width = (((idx + 1) / total) * 100).toFixed(1) + '%';
+  document.getElementById('btn-prev').disabled = idx === 0;
+  document.getElementById('btn-next').disabled = idx === deck.length - 1;
+  updateStats();
+}
+
+function updateStats() {
+  document.getElementById('hdr-known').textContent = known.size;
+  document.getElementById('hdr-learn').textContent = learning.size;
+  document.getElementById('hdr-unseen').textContent = deck.length - seen.size;
+}
+
+function flipCard() {
+  const ci = document.getElementById('card-inner');
+  isFlipped = !isFlipped;
+  ci.classList.toggle('flipped', isFlipped);
+  const key = deck[idx].rel + '|' + idx;
+  seen.add(key);
+  if (!isFlipped) {
+    document.getElementById('qblock-1').classList.add('hidden');
+    document.getElementById('qblock-2').classList.add('hidden');
+  }
+  if (!isFlipped) document.getElementById('action-row').classList.remove('visible');
+  updateStats();
+}
+
+function revealQuote(e, n) {
+  e.stopPropagation();
+  document.getElementById('qblock-' + n).classList.remove('hidden');
+  const allRevealed = !document.getElementById('qblock-1').classList.contains('hidden') &&
+                      !document.getElementById('qblock-2').classList.contains('hidden');
+  if (allRevealed) {
+    document.getElementById('action-row').classList.add('visible');
+  }
+}
+
+  function markCard(isKnown) {
+    const card = deck[idx];
+    const key = card.rel + '|' + idx;
+    if (isKnown) { known.add(key); learning.delete(key); }
+    else { learning.add(key); known.delete(key); }
+    recordFlashcard(card, isKnown);
+    nextCard();
+  }
+
+function nextCard() {
+  if (idx < deck.length - 1) { idx++; render(true); }
+}
+
+function prevCard() {
+  if (idx > 0) { idx--; render(true); }
+}
+
+document.getElementById('btn-shuffle').addEventListener('click', () => {
+  shuffle(deck); idx = 0; seen.clear(); known.clear(); learning.clear(); render(false);
+});
+document.getElementById('filter-rel').addEventListener('change', () => { buildSections(); applyFilters(); });
+document.getElementById('filter-section').addEventListener('change', applyFilters);
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+  if (e.key === 'ArrowRight') nextCard();
+  else if (e.key === 'ArrowLeft') prevCard();
+  else if (e.key === ' ') {
+    e.preventDefault();
+    if (!isFlipped) { flipCard(); }
+    else if (document.getElementById('qblock-1').classList.contains('hidden')) { document.getElementById('qblock-1').classList.remove('hidden'); }
+    else if (document.getElementById('qblock-2').classList.contains('hidden')) {
+      document.getElementById('qblock-2').classList.remove('hidden');
+      document.getElementById('action-row').classList.add('visible');
+    }
+  }
+  else if (e.key === '1') markCard(false);
+  else if (e.key === '2') markCard(true);
+});
+
+buildSections();
+render(false);
+
+// ══════════════════════════════════════════
+// QUOTE TEST PAPER
+// ══════════════════════════════════════════
+let testPaperQuestions = [];
+let testSubmitted = false;
+
+function buildTopicCheckboxes() {
+  const container = document.getElementById('topic-checkboxes');
+  container.innerHTML = '';
+  ALL_CARDS.forEach((card, i) => {
+    const label = document.createElement('label');
+    label.className = 'topic-check-label';
+    label.innerHTML = `
+      <input type="checkbox" value="${i}" onchange="updateTopicCount()">
+      <span class="check-rel-badge ${card.rel}">${card.rel === 'christianity' ? 'C' : 'I'}</span>
+      <span>${card.topic}</span>`;
+    container.appendChild(label);
+  });
+  updateTopicCount();
+}
+
+function updateTopicCount() {
+  const checked = document.querySelectorAll('#topic-checkboxes input[type=checkbox]:checked').length;
+  document.getElementById('test-topic-count').textContent = checked + ' topic' + (checked !== 1 ? 's' : '') + ' selected';
+  document.querySelectorAll('.topic-check-label').forEach(l => {
+    l.classList.toggle('selected', l.querySelector('input').checked);
+  });
+}
+
+function selectAllTopics(val) {
+  document.querySelectorAll('#topic-checkboxes input[type=checkbox]').forEach(cb => cb.checked = val);
+  updateTopicCount();
+}
+
+function selectReligion(rel) {
+  document.querySelectorAll('#topic-checkboxes input[type=checkbox]').forEach((cb, i) => {
+    cb.checked = ALL_CARDS[i].rel === rel;
+  });
+  updateTopicCount();
+}
+
+function generateTestPaper() {
+  const checked = [...document.querySelectorAll('#topic-checkboxes input[type=checkbox]:checked')];
+  if (checked.length === 0) { alert('Please select at least one topic.'); return; }
+
+  testPaperQuestions = [];
+  testSubmitted = false;
+  checked.forEach(cb => {
+    const card = ALL_CARDS[parseInt(cb.value)];
+    testPaperQuestions.push({ card, quoteNum: 1, quote: card.q1, ref: card.r1 });
+    testPaperQuestions.push({ card, quoteNum: 2, quote: card.q2, ref: card.r2 });
+  });
+  shuffle(testPaperQuestions);
+
+  document.getElementById('test-setup-area').style.display = 'none';
+  document.getElementById('test-paper-area').style.display = 'block';
+  document.getElementById('test-results-summary').style.display = 'none';
+  document.getElementById('live-score').textContent = '0';
+  document.getElementById('live-max').textContent = testPaperQuestions.length * 2;
+
+  const container = document.getElementById('test-questions-container');
+  container.innerHTML = '';
+  testPaperQuestions.forEach((q, i) => {
+    // brief description of what the quote covers
+    const quoteDesc = describeQuote(q.card, q.quoteNum);
+    const div = document.createElement('div');
+    div.className = 'test-question';
+    div.id = 'tq-' + i;
+    div.setAttribute('data-hint-used', 'false');
+    div.innerHTML = `
+      <div class="tq-meta">
+        <span class="tq-num">Q${i + 1}</span>
+        <span class="check-rel-badge ${q.card.rel}" style="font-size:0.65rem;">${q.card.rel === 'christianity' ? 'Christianity' : 'Islam'}</span>
+        <span class="tq-topic">${q.card.topic}</span>
+      </div>
+      <div class="tq-prompt">
+        Quote about <em>${quoteDesc}</em>  <span>${q.ref}</span>
+      </div>
+      <div class="tq-hint-row">
+        <button class="btn-hint" id="tq-hint-btn-${i}" onclick="useHint(${i})">💡 Use Hint</button>
+        <span class="hint-penalty-note">Hint limits your score to 1/2 marks max</span>
+        <span class="hint-active-notice" id="tq-hint-notice-${i}">⚠ Hint used — max 1 mark</span>
+      </div>
+      <div class="tq-hint-blanks" id="tq-hint-blanks-${i}"></div>
+      <div class="tq-blank-inputs" id="tq-blank-inputs-${i}"></div>
+      <textarea class="tq-input" id="tq-input-${i}" placeholder="Type the full quote here…" rows="2"></textarea>
+      <div class="tq-feedback" id="tq-feedback-${i}"></div>`;
+    container.appendChild(div);
+  });
+  document.getElementById('btn-submit-test').style.display = '';
+}
+
+// Brief descriptions of what each quote covers for the test prompts
+function describeQuote(card, quoteNum) {
+  const topicShort = card.topic.split(':')[0].split(',')[0].split('(')[0].trim();
+  const label = topicShort.length > 50 ? topicShort.substring(0, 48) + '…' : topicShort;
+  return label;
+}
+
+// Returns array of "key" words to blank out (every ~3rd meaningful word)
+function getBlankWords(quote) {
+  const words = quote.split(' ');
+  // Filter stopwords
+  const stopwords = new Set(['a','an','the','and','or','but','in','of','to','for','is','are','was','were','be','it','its','he','she','they','we','you','i','my','his','her','their','our','not','no','if','as','by','on','at','with','from','into','that','this','which','who','will','have','has','had','do','does','did','so','than','then','than','yet','both','each','more','most','after','before','above','below','up','down','very','just','how','when','where','why','what','all','any','few','such','too','also']);
+  const keyIndices = [];
+  words.forEach((w, i) => {
+    const clean = w.toLowerCase().replace(/[^a-z]/g, '');
+    if (clean.length > 3 && !stopwords.has(clean)) keyIndices.push(i);
+  });
+  // Pick about 30% of key words to blank, spaced out
+  const blanked = [];
+  keyIndices.forEach((idx, pos) => {
+    if (pos % 3 === 1) blanked.push(idx);
+  });
+  // Always blank at least 2 words if possible
+  if (blanked.length < 2 && keyIndices.length >= 2) {
+    blanked.push(keyIndices[0]);
+    if (keyIndices.length > 1) blanked.push(keyIndices[Math.floor(keyIndices.length / 2)]);
+  }
+  return blanked;
+}
+
+function useHint(i) {
+  const q = testPaperQuestions[i];
+  const tqDiv = document.getElementById('tq-' + i);
+  tqDiv.setAttribute('data-hint-used', 'true');
+
+  // Hide full textarea, show blank-fill UI
+  const textarea = document.getElementById('tq-input-' + i);
+  textarea.style.display = 'none';
+  document.getElementById('tq-hint-btn-' + i).disabled = true;
+  document.getElementById('tq-hint-notice-' + i).classList.add('visible');
+
+  const words = q.quote.split(' ');
+  const blankIndices = new Set(getBlankWords(q.quote));
+
+  // Build hint display (quote with blanks shown as underscores)
+  const blanksDiv = document.getElementById('tq-hint-blanks-' + i);
+  blanksDiv.innerHTML = words.map((w, idx) =>
+    blankIndices.has(idx)
+      ? `<span class="blank-word">${'&nbsp;'.repeat(Math.max(4, w.replace(/[^a-z]/gi,'').length + 1))}</span>`
+      : w
+  ).join(' ');
+  blanksDiv.classList.add('visible');
+
+  // Build input fields for blanked words
+  const inputsDiv = document.getElementById('tq-blank-inputs-' + i);
+  let blankCount = 0;
+  blankIndices.forEach(idx => {
+    blankCount++;
+    const wrap = document.createElement('div');
+    wrap.className = 'blank-input-wrap';
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.className = 'blank-input';
+    inp.id = `tq-blank-${i}-${idx}`;
+    inp.setAttribute('data-word-index', idx);
+    inp.placeholder = '…';
+    inp.style.width = Math.max(70, (words[idx].length * 11)) + 'px';
+    const lbl = document.createElement('div');
+    lbl.className = 'blank-input-label';
+    lbl.textContent = 'word ' + blankCount;
+    wrap.appendChild(inp);
+    wrap.appendChild(lbl);
+    inputsDiv.appendChild(wrap);
+  });
+  inputsDiv.classList.add('visible');
+}
+
+function levenshtein(a, b) {
+  const m = a.length, n = b.length;
+  const dp = Array.from({length: m+1}, (_, i) => Array.from({length: n+1}, (_, j) => i === 0 ? j : j === 0 ? i : 0));
+  for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++)
+    dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+  return dp[m][n];
+}
+
+function scoreQuote(userAns, correctQ) {
+  const normalise = s => s.toLowerCase().replace(/[''""]/g, '"').replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
+  const u = normalise(userAns);
+  const c = normalise(correctQ);
+  if (!u) return 0;
+  if (u === c) return 2;
+  const dist = levenshtein(u, c);
+  const maxLen = Math.max(u.length, c.length);
+  const similarity = 1 - dist / maxLen;
+  // Also check word overlap
+  const uWords = new Set(u.split(' '));
+  const cWords = c.split(' ');
+  const overlap = cWords.filter(w => uWords.has(w)).length / cWords.length;
+  if (similarity >= 0.85 || overlap >= 0.8) return 2;
+  if (similarity >= 0.6 || overlap >= 0.55) return 1;
+  return 0;
+}
+
+function submitTestPaper() {
+  if (testSubmitted) return;
+  testSubmitted = true;
+  document.getElementById('btn-submit-test').style.display = 'none';
+
+  let totalScore = 0, perfect = 0, partial = 0, wrong = 0;
+
+  testPaperQuestions.forEach((q, i) => {
+    const tqDiv = document.getElementById('tq-' + i);
+    const feedback = document.getElementById('tq-feedback-' + i);
+    const hintUsed = tqDiv.getAttribute('data-hint-used') === 'true';
+
+    let userAns;
+    if (hintUsed) {
+      // Reconstruct answer from blank inputs + original non-blanked words
+      const words = q.quote.split(' ');
+      const blankIndices = new Set(getBlankWords(q.quote));
+      const filled = [...words];
+      blankIndices.forEach(idx => {
+        const inp = document.getElementById(`tq-blank-${i}-${idx}`);
+        if (inp) { filled[idx] = inp.value || ''; inp.disabled = true; }
+      });
+      userAns = filled.join(' ');
+      // Disable textarea too
+      const ta = document.getElementById('tq-input-' + i);
+      if (ta) ta.disabled = true;
+    } else {
+      const input = document.getElementById('tq-input-' + i);
+      userAns = input.value;
+      input.disabled = true;
+    }
+
+    let marks = scoreQuote(userAns, q.quote);
+    if (hintUsed && marks > 1) marks = 1; // hint caps at 1
+
+    totalScore += marks;
+    // Record for confidence ranking
+    recordQuoteTest(q.card, marks, 2);
+
+    if (marks === 2) {
+      tqDiv.classList.add('correct');
+      feedback.className = 'tq-feedback correct';
+      feedback.innerHTML = '✓ Perfect — 2/2 marks';
+      perfect++;
+    } else if (marks === 1) {
+      tqDiv.classList.add('partial');
+      feedback.className = 'tq-feedback partial';
+      feedback.innerHTML = (hintUsed ? '~ Correct (hint used) — 1/2 marks max' : '~ Close — 1/2 marks') + '<div class="tq-correct-ans">Correct: "' + q.quote + '"</div>';
+      partial++;
+    } else {
+      tqDiv.classList.add('wrong');
+      feedback.className = 'tq-feedback wrong';
+      feedback.innerHTML = '✗ Missed — 0/2 marks<div class="tq-correct-ans">Correct: "' + q.quote + '"</div>';
+      wrong++;
+    }
+  });
+
+  const maxScore = testPaperQuestions.length * 2;
+  document.getElementById('live-score').textContent = totalScore;
+  document.getElementById('final-score-display').textContent = totalScore + '/' + maxScore;
+  document.getElementById('rb-perfect').textContent = perfect;
+  document.getElementById('rb-partial').textContent = partial;
+  document.getElementById('rb-wrong').textContent = wrong;
+  document.getElementById('test-results-summary').style.display = 'block';
+  document.getElementById('test-results-summary').scrollIntoView({ behavior: 'smooth' });
+}
+
+function reviewAnswers() {
+  document.getElementById('test-results-summary').scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('test-questions-container').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetTestPaper() {
+  document.getElementById('test-setup-area').style.display = '';
+  document.getElementById('test-paper-area').style.display = 'none';
+  testPaperQuestions = [];
+  testSubmitted = false;
+}
+
+// ══════════════════════════════════════════
+// ESSAY QUESTIONS (AI-MARKED)
+// ══════════════════════════════════════════
+let currentEssayCard = null;
+let currentEssayMarks = 12;
+
+// ── PER-TOPIC AQA-STYLE QUESTION BANK ──
+// Each entry: { topic (matches card.topic exactly), q6: [...], q12: [...] }
+// Questions are written in authentic AQA GCSE RS style with realistic statements.
+const AQA_QUESTION_BANK = [
+  // ── CHRISTIANITY: BELIEFS ──
+  {
+    topic: "God as omnipotent, loving and just, and the problem of evil and suffering",
+    q6: [
+      "Explain two Christian beliefs about the nature of God.",
+      "Explain two ways the problem of evil and suffering challenges Christian belief in God.",
+      "Explain two Christian responses to the problem of evil and suffering.",
+    ],
+    q12: [
+      `"The existence of evil and suffering proves that God does not exist.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"A loving God would never allow suffering.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "The oneness of God and the Trinity: Father, Son and Holy Spirit",
+    q6: [
+      "Explain two Christian beliefs about the Trinity.",
+      "Explain two reasons why the Trinity is important to Christians.",
+      "Explain two ways in which belief in the Trinity influences Christian worship.",
+    ],
+    q12: [
+      `"Belief in the Trinity is confusing and unnecessary.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Christians should only focus on God the Father.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Different Christian beliefs about creation including the role of Word and Spirit (John 1:1-3 and Genesis 1:1-3)",
+    q6: [
+      "Explain two Christian beliefs about creation.",
+      "Explain two different Christian views about how God created the world.",
+      "Explain two ways in which the creation story is important for Christians.",
+    ],
+    q12: [
+      `"Science has made the Christian teaching about creation impossible to believe.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Christians must interpret Genesis 1 literally.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Different Christian beliefs about the afterlife: resurrection, judgement, heaven and hell",
+    q6: [
+      "Explain two Christian beliefs about what happens after death.",
+      "Explain two different Christian views about heaven and hell.",
+      "Explain two reasons why belief in the afterlife is important to Christians.",
+    ],
+    q12: [
+      `"There is no life after death.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"The idea of hell is incompatible with a loving God.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "The incarnation and Jesus as the Son of God",
+    q6: [
+      "Explain two Christian beliefs about the incarnation.",
+      "Explain two reasons why the incarnation is important for Christians.",
+      "Explain two ways in which the belief that Jesus is the Son of God affects Christians today.",
+    ],
+    q12: [
+      `"Jesus was just a good teacher, not the Son of God.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"The incarnation is the most important Christian belief.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "The crucifixion, resurrection and ascension",
+    q6: [
+      "Explain two Christian beliefs about the resurrection of Jesus.",
+      "Explain two reasons why the crucifixion is important to Christians.",
+      "Explain two ways in which the resurrection affects Christian life today.",
+    ],
+    q12: [
+      `"The resurrection of Jesus is the most important event in Christian history.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Without the crucifixion, Christianity has no meaning.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Sin, including original sin",
+    q6: [
+      "Explain two Christian beliefs about sin.",
+      "Explain two ways in which the belief in original sin affects Christians.",
+      "Explain two different Christian views about original sin.",
+    ],
+    q12: [
+      `"All humans are born sinful and cannot help but sin.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Original sin is the most important Christian teaching about human nature.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "The means of salvation: law, grace and Spirit",
+    q6: [
+      "Explain two Christian beliefs about how people can be saved.",
+      "Explain two ways in which the Holy Spirit helps Christians in their daily lives.",
+      "Explain two Christian teachings about grace.",
+    ],
+    q12: [
+      `"Salvation is a gift from God and humans can do nothing to earn it.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Following God\'s law is the most important way for a Christian to achieve salvation.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "The role of Christ in salvation including atonement",
+    q6: [
+      "Explain two Christian beliefs about atonement.",
+      "Explain two reasons why Christians believe Jesus' death was necessary for salvation.",
+      "Explain two ways in which the atonement affects how Christians live.",
+    ],
+    q12: [
+      `"Jesus\' death on the cross is the only way humans can be forgiven.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Atonement is the most important purpose of Jesus\' life.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Different forms of worship: liturgical, non-liturgical and informal, including use of the Bible",
+    q6: [
+      "Explain two different forms of Christian worship.",
+      "Explain two reasons why the Bible is important in Christian worship.",
+      "Explain two ways in which Christians worship God.",
+    ],
+    q12: [
+      `"Informal worship is more meaningful than liturgical worship.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"The style of worship does not matter as long as Christians focus on God.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Private worship",
+    q6: [
+      "Explain two ways in which Christians worship in private.",
+      "Explain two reasons why private prayer is important for Christians.",
+      "Explain two benefits of private worship for Christians.",
+    ],
+    q12: [
+      `"Private worship is more important than going to church.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Christians should pray every day.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Prayer and its significance, including the Lord's Prayer, set prayers and informal prayer",
+    q6: [
+      "Explain two Christian beliefs about prayer.",
+      "Explain two reasons why the Lord's Prayer is important to Christians.",
+      "Explain two different types of prayer used by Christians.",
+    ],
+    q12: [
+      `"Prayer is the most important part of a Christian\'s life.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Set prayers such as the Lord\'s Prayer are more valuable than informal prayer.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "The meaning of sacrament",
+    q6: [
+      "Explain two Christian beliefs about sacraments.",
+      "Explain two different Christian views about what counts as a sacrament.",
+      "Explain two reasons why sacraments are important for Christians.",
+    ],
+    q12: [
+      `"Sacraments are essential to the Christian faith.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"You do not need sacraments to have a relationship with God.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Baptism and its significance; infant and believers' baptism; different beliefs about infant baptism",
+    q6: [
+      "Explain two Christian beliefs about baptism.",
+      "Explain two reasons why baptism is important for Christians.",
+      "Explain two different Christian views about infant baptism.",
+    ],
+    q12: [
+      `"Only adults should be baptised into the Christian religion.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Baptism is the most important Christian sacrament.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Holy Communion / Eucharist and its significance; different ways it is celebrated",
+    q6: [
+      "Explain two Christian beliefs about Holy Communion.",
+      "Explain two different Christian views about what happens during the Eucharist.",
+      "Explain two reasons why Holy Communion is important for Christians.",
+    ],
+    q12: [
+      `"The Eucharist is the most important act of Christian worship.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Christians do not need to take Holy Communion to be good Christians.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "The role and importance of pilgrimage: Lourdes and Iona",
+    q6: [
+      "Explain two reasons why Christians go on pilgrimage.",
+      "Explain two ways in which a pilgrimage to Lourdes might affect a Christian.",
+      "Explain two reasons why Iona is an important place of pilgrimage for Christians.",
+    ],
+    q12: [
+      `"Pilgrimage is not necessary for Christians today.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Going on pilgrimage is the best way for a Christian to strengthen their faith.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Christmas and Easter and their importance for Christians in Great Britain today",
+    q6: [
+      "Explain two reasons why Easter is the most important festival for Christians.",
+      "Explain two ways in which Christians celebrate Christmas.",
+      "Explain two ways in which Easter is celebrated by Christians in Great Britain today.",
+    ],
+    q12: [
+      `"Easter is more important than Christmas for Christians.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Christmas has lost its religious meaning in modern Britain.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "The role of the Church in the local community, including food banks and street pastors",
+    q6: [
+      "Explain two ways in which the Christian Church helps people in the local community.",
+      "Explain two reasons why Christians run food banks.",
+      "Explain two ways in which street pastors show Christian values.",
+    ],
+    q12: [
+      `"The Church should focus on local community work rather than on worship.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Christians have a duty to help the poor in their local community.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "The place of mission, evangelism and Church growth",
+    q6: [
+      "Explain two Christian beliefs about mission and evangelism.",
+      "Explain two reasons why Christians believe they should spread their faith.",
+      "Explain two ways in which Christians carry out mission today.",
+    ],
+    q12: [
+      `"Christians should try to convert everyone to Christianity.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Evangelism is the most important duty of a Christian.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Working for reconciliation",
+    q6: [
+      "Explain two reasons why Christians believe reconciliation is important.",
+      "Explain two ways in which Christians work for reconciliation in the world.",
+      "Explain two Christian teachings about forgiveness and reconciliation.",
+    ],
+    q12: [
+      `"Forgiveness is always possible, no matter what someone has done.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Reconciliation is more important than justice.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "How Christian churches respond to persecution",
+    q6: [
+      "Explain two ways in which Christians respond to persecution.",
+      "Explain two reasons why Christians are willing to suffer for their faith.",
+      "Explain two Christian beliefs about how to deal with persecution.",
+    ],
+    q12: [
+      `"Christians should always resist persecution, even with force.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"It is wrong to change your beliefs just because you are persecuted.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "The work of CAFOD, Christian Aid, or Tearfund",
+    q6: [
+      "Explain two reasons why Christians support charities such as CAFOD or Christian Aid.",
+      "Explain two ways in which CAFOD puts Christian values into practice.",
+      "Explain two reasons why responding to poverty is important for Christians.",
+    ],
+    q12: [
+      `"Christians have a responsibility to help people suffering from poverty around the world.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Charity work is more important than prayer.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Christian teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+
+  // ── ISLAM: BELIEFS ──
+  {
+    topic: "The six articles of faith (Sunni) and five roots of Usul ad-Din (Shi'a), including key similarities and differences",
+    q6: [
+      "Explain two of the six articles of faith in Sunni Islam.",
+      "Explain two similarities between the Sunni articles of faith and the Shi'a roots of Usul ad-Din.",
+      "Explain two reasons why the articles of faith are important for Muslims.",
+    ],
+    q12: [
+      `"The differences between Sunni and Shi\'a Islam are too great to overcome.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"The articles of faith are the most important part of being a Muslim.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Tawhid (the Oneness of God), Qur'an Surah 112",
+    q6: [
+      "Explain two Muslim beliefs about Tawhid.",
+      "Explain two reasons why Tawhid is important in Islam.",
+      "Explain two ways in which belief in Tawhid affects the lives of Muslims.",
+    ],
+    q12: [
+      `"Belief in the oneness of God is the most important belief in Islam.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Shirk (associating partners with God) is the greatest sin in Islam.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "The nature of God: omnipotence, beneficence, mercy, fairness/justice (Adalat); immanence and transcendence",
+    q6: [
+      "Explain two Muslim beliefs about the nature of Allah.",
+      "Explain two reasons why Allah's mercy is important in Islam.",
+      "Explain two Muslim teachings about the justice of Allah.",
+    ],
+    q12: [
+      `"Allah\'s mercy is more important than his justice.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Belief in the transcendence of Allah makes it difficult for Muslims to have a personal relationship with God.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Angels, their nature and role, including Jibril and Mika'il",
+    q6: [
+      "Explain two Muslim beliefs about angels.",
+      "Explain two reasons why belief in angels is important for Muslims.",
+      "Explain two ways in which angels are important in Islam.",
+    ],
+    q12: [
+      `"Belief in angels is essential to being a good Muslim.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"The role of Jibril is the most important role of any angel in Islam.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Predestination (Al-Qadr) and human free will",
+    q6: [
+      "Explain two Muslim beliefs about predestination (Al-Qadr).",
+      "Explain two ways in which belief in Al-Qadr affects the lives of Muslims.",
+      "Explain two Muslim views on the relationship between predestination and free will.",
+    ],
+    q12: [
+      `"If Allah has already decided everything, humans cannot be held responsible for their actions.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Belief in predestination is incompatible with belief in human free will.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Akhirah: Muslim beliefs about life after death",
+    q6: [
+      "Explain two Muslim beliefs about life after death.",
+      "Explain two reasons why belief in Akhirah is important for Muslims.",
+      "Explain two Muslim beliefs about the Day of Judgement.",
+    ],
+    q12: [
+      `"Belief in life after death is the most important Muslim belief.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Fear of hell is a better reason to live a good life than hope of heaven.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Prophethood (Risalah): the nature and importance of prophethood; Ibrahim and Muhammad",
+    q6: [
+      "Explain two reasons why Muhammad is important in Islam.",
+      "Explain two Muslim beliefs about prophethood.",
+      "Explain two reasons why Ibrahim is an important prophet in Islam.",
+    ],
+    q12: [
+      `"Muhammad is the most important figure in Islam.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Prophethood is the most important way in which Allah communicates with humans.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "The Holy Books: the Qur'an — revelation and authority; Torah, Psalms, Gospel and their authority",
+    q6: [
+      "Explain two Muslim beliefs about the Qur'an.",
+      "Explain two reasons why the Qur'an is important for Muslims.",
+      "Explain two Muslim views about the authority of earlier holy books such as the Torah and Gospel.",
+    ],
+    q12: [
+      `"The Qur\'an is the most important source of authority for Muslims.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Muslims should follow the teachings of the Qur\'an literally in the modern world.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "The Imamate in Shi'a Islam: its role and significance",
+    q6: [
+      "Explain two Shi'a Muslim beliefs about the Imamate.",
+      "Explain two reasons why the Imamate is important in Shi'a Islam.",
+      "Explain two differences between Sunni and Shi'a beliefs about religious leadership.",
+    ],
+    q12: [
+      `"The Imamate is essential to Shi\'a Muslim belief and practice.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Religious leadership is more important in Shi\'a Islam than in Sunni Islam.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+
+  // ── ISLAM: PRACTICES ──
+  {
+    topic: "Shahadah: declaration of faith and its place in Muslim practice",
+    q6: [
+      "Explain two reasons why the Shahadah is important for Muslims.",
+      "Explain two ways in which the Shahadah is used in Muslim life.",
+      "Explain two Muslim beliefs expressed in the Shahadah.",
+    ],
+    q12: [
+      `"The Shahadah is the most important of the Five Pillars.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Saying the Shahadah is enough to make someone a good Muslim.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Salah and its significance: how and why Muslims pray, including wudu, rak'ahs; Sunni and Shi'a differences",
+    q6: [
+      "Explain two reasons why Salah is important for Muslims.",
+      "Explain two ways in which Salah is performed by Muslims.",
+      "Explain two differences between Sunni and Shi'a practice of Salah.",
+    ],
+    q12: [
+      `"Prayer is the most important duty of a Muslim.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Muslims should pray five times a day no matter what.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Sawm: the fast of Ramadan including its significance and the Night of Power (Laylat al-Qadr)",
+    q6: [
+      "Explain two reasons why Sawm during Ramadan is important for Muslims.",
+      "Explain two ways in which fasting during Ramadan affects the life of a Muslim.",
+      "Explain two Muslim beliefs about the Night of Power (Laylat al-Qadr).",
+    ],
+    q12: [
+      `"Fasting during Ramadan is the most important of the Five Pillars.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"The Night of Power is the most important night of the year for Muslims.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Zakah: giving alms — origins, how and why it is given, benefits; Khums in Shi'a Islam",
+    q6: [
+      "Explain two reasons why Zakah is important in Islam.",
+      "Explain two ways in which giving Zakah benefits the Muslim community.",
+      "Explain two differences between Zakah in Sunni Islam and Khums in Shi'a Islam.",
+    ],
+    q12: [
+      `"Zakah is the most important of the Five Pillars because it helps others.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Giving money to charity is the best way for a Muslim to show their faith.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Hajj: pilgrimage to Makkah — origins, how it is performed, Ka'aba, Mina, Arafat, Muzdalifah",
+    q6: [
+      "Explain two reasons why Hajj is important for Muslims.",
+      "Explain two ways in which Hajj affects the life of a Muslim.",
+      "Explain two rituals performed during Hajj and their meaning.",
+    ],
+    q12: [
+      `"Hajj is the most important of the Five Pillars.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Every Muslim should go on Hajj, no matter the cost.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Jihad: greater and lesser jihad — meaning, significance, origins and conditions for lesser jihad",
+    q6: [
+      "Explain two Muslim beliefs about jihad.",
+      "Explain two differences between greater jihad and lesser jihad.",
+      "Explain two conditions that must be met for lesser jihad to be justified.",
+    ],
+    q12: [
+      `"Greater jihad is more important than lesser jihad.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Violence can never be justified in the name of religion.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Id-ul-Adha: origins and meaning",
+    q6: [
+      "Explain two reasons why Id-ul-Adha is important for Muslims.",
+      "Explain two ways in which Muslims celebrate Id-ul-Adha.",
+      "Explain two ways in which the story of Ibrahim is remembered during Id-ul-Adha.",
+    ],
+    q12: [
+      `"Id-ul-Adha is the most important Muslim festival.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"The sacrifice performed at Id-ul-Adha has no place in modern society.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Id-ul-Fitr: origins and meaning",
+    q6: [
+      "Explain two reasons why Id-ul-Fitr is important for Muslims.",
+      "Explain two ways in which Muslims celebrate Id-ul-Fitr.",
+      "Explain two ways in which Id-ul-Fitr strengthens the Muslim community.",
+    ],
+    q12: [
+      `"Id-ul-Fitr is more important than Id-ul-Adha.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Celebrating festivals is the best way for Muslims to show their faith.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+  {
+    topic: "Ashura: origins and meaning",
+    q6: [
+      "Explain two reasons why Ashura is important for Muslims.",
+      "Explain two ways in which Sunni and Shi'a Muslims observe Ashura differently.",
+      "Explain two Muslim beliefs connected to the observance of Ashura.",
+    ],
+    q12: [
+      `"Ashura is more important for Shi\'a Muslims than for Sunni Muslims.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+      `"Commemorating past events through festivals is an important part of religious life.' Evaluate this statement.\n\nIn your answer you should:\n• refer to Muslim teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+    ],
+  },
+];
+
+function getQuestionsForCard(card, marks) {
+  const entry = AQA_QUESTION_BANK.find(e => e.topic === card.topic);
+  if (entry) {
+    const pool = marks === 12 ? entry.q12 : entry.q6;
+    return pool;
+  }
+  // Generic fallback (should rarely trigger)
+  const rel = card.rel === 'christianity' ? 'Christianity' : 'Islam';
+  const believer = card.rel === 'christianity' ? 'Christian' : 'Muslim';
+  if (marks === 6) return [
+    `Explain two ${rel} beliefs about ${card.topic}.`,
+    `Explain two ways in which ${card.topic} affects the life of a ${believer}.`,
+    `Explain two reasons why ${card.topic} is important in ${rel}.`,
+  ];
+  return [
+    `'${card.topic} is the most important belief in ${rel}.' Evaluate this statement.\n\nIn your answer you should:\n• refer to ${rel} teaching\n• give reasoned arguments to support this statement\n• give reasoned arguments to support a different point of view\n• reach a justified conclusion.`,
+  ];
+}
+
+function buildEssaySectionFilter() {
+  const rel = document.getElementById('essay-rel-filter').value;
+  const sel = document.getElementById('essay-section-filter');
+  sel.innerHTML = '<option value="all">All sections</option>';
+  const secs = [...new Set(ALL_CARDS.filter(c => rel === 'all' || c.rel === rel).map(c => c.section))];
+  secs.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; sel.appendChild(o); });
+}
+
+document.getElementById('essay-rel-filter').addEventListener('change', buildEssaySectionFilter);
+
+async function generateEssayQuestion() {
+  const rel = document.getElementById('essay-rel-filter').value;
+  const sec = document.getElementById('essay-section-filter').value;
+  const markPref = document.getElementById('essay-mark-type').value;
+
+  let pool = ALL_CARDS.filter(c => (rel === 'all' || c.rel === rel) && (sec === 'all' || c.section === sec));
+  if (pool.length === 0) { alert('No topics match your filters.'); return; }
+
+  currentEssayCard = pool[Math.floor(Math.random() * pool.length)];
+  currentEssayMarks = markPref === 'random' ? (Math.random() < 0.5 ? 12 : 6) : parseInt(markPref);
+
+  const relLabel = currentEssayCard.rel === 'christianity' ? 'Christianity' : 'Islam';
+  const believerLabel = currentEssayCard.rel === 'christianity' ? 'Christian' : 'Muslim';
+
+  // Show loading, hide existing question
+  document.getElementById('essay-gen-loading').classList.add('visible');
+  document.getElementById('essay-question-area').style.display = 'none';
+  document.getElementById('essay-marking-result').style.display = 'none';
+
+  // Generate question with AI
+  let qText;
+  try {
+    const systemPrompt = `You are an AQA GCSE Religious Studies examiner generating exam questions. Respond ONLY with valid JSON, no markdown, no backticks.`;
+    const marks = currentEssayMarks;
+    const userPrompt = marks === 12 ? `Generate ONE original AQA GCSE RS 12-mark evaluation question for the following topic. It must follow the exact real AQA format precisely:
+
+Topic: ${currentEssayCard.topic}
+Religion: ${relLabel}
+Section: ${currentEssayCard.section}
+
+The question MUST follow this exact structure:
+1. A statement in quotation marks that is debatable and relates directly to the topic — NOT a generic or vague statement. Make it specific and thought-provoking, the kind that appears on real AQA papers.
+2. The line: "Evaluate this statement."
+3. Then exactly these bullet points on separate lines:
+   • refer to ${relLabel} teaching
+   • give reasoned arguments to support this statement
+   • give reasoned arguments to support a different point of view
+   • reach a justified conclusion.
+
+Look at real AQA examples: "'Prayer is the most important religious practice for ${believerLabel}s.' Evaluate this statement." or "'Without belief in the afterlife, ${relLabel} would lose its meaning.' Evaluate this statement."
+
+Relevant quotes from the spec that students should know:
+- "${currentEssayCard.q1}" (${currentEssayCard.r1})
+- "${currentEssayCard.q2}" (${currentEssayCard.r2})
+
+Generate a question that a top-band student could use these quotes in. Make the statement genuinely debatable — not obviously true or false.
+
+Respond ONLY with JSON: {"question": "<the full question text including the statement, 'Evaluate this statement.' and all bullet points>"}` :
+`Generate ONE original AQA GCSE RS 6-mark question for the following topic. It must follow the exact real AQA format precisely:
+
+Topic: ${currentEssayCard.topic}
+Religion: ${relLabel}
+Section: ${currentEssayCard.section}
+
+The 6-mark question format (from summer 2026 new spec):
+- Stem: "Explain two [teachings/beliefs/ways/reasons] about [specific aspect of topic]."
+- MUST end with: "Refer to sacred writings or another source of ${relLabel} belief and teaching in your answer."
+- The question should require students to apply relevant sacred texts — one of these quotes is especially useful:
+  • "${currentEssayCard.q1}" (${currentEssayCard.r1})
+  • "${currentEssayCard.q2}" (${currentEssayCard.r2})
+
+Real AQA examples of 6-mark questions:
+- "Explain two ${relLabel} teachings about [topic]. Refer to sacred writings or another source of ${relLabel} belief and teaching in your answer."
+- "Explain two ways in which [belief] influences ${believerLabel}s today. Refer to sacred writings or another source of ${relLabel} belief and teaching in your answer."
+- "Explain two reasons why [practice] is important for ${believerLabel}s. Refer to sacred writings or another source of ${relLabel} belief and teaching in your answer."
+
+Make it specific to the topic — not generic. Vary the stem (teachings/beliefs/ways/reasons) based on what fits the topic best.
+
+Respond ONLY with JSON: {"question": "<the full question text>"}`;
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 400,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userPrompt }]
+      })
+    });
+    const data = await response.json();
+    const raw = data.content.map(b => b.text || '').join('');
+    const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    qText = parsed.question;
+  } catch(e) {
+    // Fallback to static bank if AI fails
+    const qPool = getQuestionsForCard(currentEssayCard, currentEssayMarks);
+    qText = qPool[Math.floor(Math.random() * qPool.length)];
+  }
+
+  document.getElementById('essay-gen-loading').classList.remove('visible');
+
+  const instruction12 = `[12 marks + 3 SPaG marks]\nIn your answer refer to ${relLabel} teaching and give a justified conclusion.`;
+  const instruction6 = `[6 marks]\nRefer to ${relLabel} teaching and apply sacred writings in your answer.`;
+
+  document.getElementById('essay-mark-badge').textContent = currentEssayMarks + ' marks';
+  document.getElementById('essay-mark-badge').className = 'mark-badge ' + (currentEssayMarks === 12 ? 'twelve' : 'six');
+  document.getElementById('essay-rel-badge').textContent = relLabel;
+  document.getElementById('essay-rel-badge').className = 'religion-badge ' + currentEssayCard.rel;
+  document.getElementById('essay-topic-label').textContent = currentEssayCard.section;
+  document.getElementById('essay-q-text').textContent = qText;
+  document.getElementById('essay-q-instruction').textContent = currentEssayMarks === 12 ? instruction12 : instruction6;
+  document.getElementById('essay-answer').value = '';
+  document.getElementById('word-count').textContent = '0 words';
+  document.getElementById('essay-answer').disabled = false;
+  document.getElementById('btn-mark-essay').disabled = false;
+  document.getElementById('essay-marking-result').style.display = 'none';
+  document.getElementById('emr-content').style.display = 'none';
+  document.getElementById('emr-loading').style.display = 'flex';
+  document.getElementById('essay-question-area').style.display = 'block';
+  document.getElementById('emr-markscheme-section').style.display = 'none';
+  document.getElementById('markscheme-panel').classList.remove('visible');
+}
+
+function toggleMarkScheme() {
+  const panel = document.getElementById('markscheme-panel');
+  const label = document.getElementById('ms-btn-label');
+  const icon = document.getElementById('ms-btn-icon');
+  const isVisible = panel.classList.contains('visible');
+  panel.classList.toggle('visible', !isVisible);
+  label.textContent = isVisible ? 'Show AQA Mark Scheme' : 'Hide AQA Mark Scheme';
+  icon.textContent = isVisible ? '📋' : '📖';
+}
+
+function updateWordCount() {
+  const text = document.getElementById('essay-answer').value.trim();
+  const words = text ? text.split(/\s+/).length : 0;
+  document.getElementById('word-count').textContent = words + ' word' + (words !== 1 ? 's' : '');
+}
+
+let lastMarkingResult = null;
+let lastParagraphs = [];
+
+function scoreToGcseGrade(score, maxMarks) {
+  if (maxMarks === 12) {
+    if (score >= 11) return '9';
+    if (score >= 10) return '8';
+    if (score >= 8)  return '7';
+    if (score >= 7)  return '6';
+    if (score >= 5)  return '5';
+    if (score >= 4)  return '4';
+    if (score >= 2)  return '3';
+    if (score >= 1)  return '2';
+    return '1';
+  } else {
+    if (score >= 6)  return '9';
+    if (score >= 5)  return '7';
+    if (score >= 4)  return '5';
+    if (score >= 3)  return '4';
+    if (score >= 2)  return '3';
+    return '2';
+  }
+}
+
+function bulletHtml(text) {
+  if (!text) return '';
+  return text.split('•').filter(s => s.trim()).map(s =>
+    `<div style="display:flex;gap:8px;margin-bottom:6px;"><span style="color:var(--gold);flex-shrink:0;">•</span><span>${s.trim()}</span></div>`
+  ).join('');
+}
+
+async function markEssay() {
+  const answer = document.getElementById('essay-answer').value.trim();
+  if (!answer || answer.length < 20) { alert('Please write a more complete answer before submitting.'); return; }
+
+  document.getElementById('essay-answer').disabled = true;
+  document.getElementById('btn-mark-essay').disabled = true;
+  document.getElementById('essay-marking-result').style.display = 'block';
+  document.getElementById('emr-loading').style.display = 'flex';
+  document.getElementById('emr-content').style.display = 'none';
+  document.getElementById('essay-marking-result').scrollIntoView({ behavior: 'smooth' });
+
+  const relLabel = currentEssayCard.rel === 'christianity' ? 'Christianity' : 'Islam';
+  const qText = document.getElementById('essay-q-text').textContent;
+  const marks = currentEssayMarks;
+
+  lastParagraphs = answer.split(/\n+/).map(p => p.trim()).filter(p => p.length > 20);
+
+  const systemPrompt = `You are an experienced AQA GCSE Religious Studies examiner. You mark student answers strictly according to AQA mark scheme criteria. Always respond ONLY with valid JSON — no markdown, no backticks, no preamble whatsoever.`;
+
+  const userPrompt = `Mark this student's AQA GCSE RS answer in full detail.
+
+QUESTION (${marks} marks): "${qText}"
+RELIGION: ${relLabel}
+TOPIC: ${currentEssayCard.topic}
+RELEVANT QUOTES FROM SPEC:
+- "${currentEssayCard.q1}" (${currentEssayCard.r1})
+- "${currentEssayCard.q2}" (${currentEssayCard.r2})
+
+STUDENT ANSWER:
+${answer}
+
+PARAGRAPHS (for breakdown):
+${lastParagraphs.map((p,i) => `[${i}]: ${p.substring(0,200)}`).join('\n')}
+
+AQA MARK SCHEME GUIDANCE:
+${marks === 12 ? `
+12-mark questions assess AO1 (knowledge/understanding) and AO2 (analysis/evaluation). This is a "Evaluate this statement" question.
+
+Band 4 (10-12): Excellent, well-developed response. Thorough and accurate religious knowledge with relevant detail. A range of views considered with well-structured analysis and evaluation. Clear, well-substantiated conclusion. Coherent and reasoned throughout.
+Band 3 (7-9): Good response with analysis and some evaluation. Generally accurate religious knowledge. Range of views given with some analysis. Conclusion supported with some justification. Generally coherent.
+Band 2 (4-6): Limited response with some explanation. Some knowledge of religion. May attempt a range of views but limited analysis and minimal evaluation. Conclusion may be present but little justification.
+Band 1 (1-3): Weak response. Little relevant religious knowledge. Views may be stated with little support. No or very little evaluation.
+Band 0 (0): Nothing worthy of credit.
+
+KEY RULES: A one-sided answer with no counter-argument is capped at Band 2 (max 6). A response with no religious teaching is capped at Band 2 (max 6).
+
+SPaG: Award separately, ALWAYS out of 3 (never more, never less as a maximum). Only award if essay score is 5 or above.
+3 = spelling/punctuation/grammar consistently accurate; specialist terminology used with precision.
+2 = generally accurate with occasional errors; specialist terminology used with some accuracy.
+1 = some accuracy but frequent errors; limited specialist terminology.
+0 = not worthy of marks, or essay score below 5.
+IMPORTANT: spag must be an integer 0, 1, 2, or 3 ONLY. Never 4 or 5.
+` : `
+6-mark questions assess AO1 (knowledge/understanding) only. Format: "Explain two [teachings/beliefs/ways] about [topic]. Refer to sacred writings or another source of belief and teaching in your answer."
+
+New 2026 AQA mark scheme (6 marks):
+Band 3 (5-6): Detailed explanation of two or more points with development. Accurate and relevant religious knowledge. Clear and relevant application of a named source of authority (scripture, sacred writing, religious teacher, etc.) to support the explanation. The source of authority is identified AND its relevance is explained.
+Band 2 (3-4): Some explanation of two points with limited development. Generally accurate knowledge. A source of authority may be identified but not fully applied, OR only one point is well developed.
+Band 1 (1-2): Basic points with little or no development. May name a source of authority but without application.
+Band 0 (0): Nothing worthy of credit.
+
+KEY: Students MUST refer to sacred writings or another source of authority to access full marks. Simply naming a source is not enough — they must explain its relevance. No SPaG marks for 6-mark questions.
+`}
+
+Respond ONLY with this exact JSON (no markdown, no backticks):
+{
+  "score": <integer 0-${marks}>,
+  "spag": <integer 0-3 for 12-mark ONLY; use 0 for 6-mark>,
+  "band": "<e.g. Band 3>",
+  "bandJustification": "<2-3 sentences explaining precisely why this band and not higher or lower, including whether the student applied a named source of authority${marks===6?' (critical for 6-mark questions)':''}>",
+  "strengths": "<bullet points each starting with •, at least 2 specific strengths>",
+  "improvements": "<bullet points each starting with •, at least 2 specific actionable improvements>",
+  "ao1Rating": "<Good|Adequate|Weak>",
+  "ao2Rating": "<Good|Adequate|Weak|N/A>",
+  "modelPoints": "<bullet points each starting with • of key points a top-band answer would include>",
+  "paragraphBreakdown": [
+    {
+      "index": <integer matching paragraph index>,
+      "rating": "<Good|OK|Weak>",
+      "comment": "<1 sentence specific feedback on this paragraph>",
+      "isWeak": <true if this paragraph most needs improvement>
+    }
+  ]
+}`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1500,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userPrompt }]
+      })
+    });
+    const data = await response.json();
+    const raw = data.content.map(b => b.text || '').join('');
+    let result;
+    try {
+      result = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    } catch(e) { throw new Error('Could not parse AI response.'); }
+    lastMarkingResult = result;
+    // Record for confidence ranking
+    recordEssay(currentEssayCard, result.score, marks);
+
+    // Grade hero
+    const grade = scoreToGcseGrade(result.score, marks);
+    const hero = document.getElementById('emr-grade-hero');
+    hero.className = 'emr-grade-hero grade-' + grade;
+    document.getElementById('emr-grade-letter').textContent = grade;
+    document.getElementById('emr-score-num').textContent = result.score;
+    document.getElementById('emr-score-denom').textContent = '/ ' + marks;
+    document.getElementById('emr-grade-band-label').textContent = result.band;
+    if (marks === 12 && result.spag > 0) {
+      document.getElementById('emr-spag-row').style.display = '';
+      document.getElementById('emr-spag-num').textContent = result.spag;
+    } else {
+      document.getElementById('emr-spag-row').style.display = 'none';
+    }
+
+    document.getElementById('emr-band').textContent = result.bandJustification || '';
+
+    // AO chips
+    const aosDiv = document.getElementById('emr-aos');
+    aosDiv.innerHTML = '';
+    const rc = r => r === 'Good' ? 'good' : r === 'Adequate' ? 'ok' : 'weak';
+    aosDiv.innerHTML += `<span class="ao-chip ${rc(result.ao1Rating)}">AO1 Knowledge: ${result.ao1Rating}</span>`;
+    if (marks === 12) aosDiv.innerHTML += `<span class="ao-chip ${rc(result.ao2Rating)}">AO2 Evaluation: ${result.ao2Rating}</span>`;
+
+    document.getElementById('emr-strengths').innerHTML = bulletHtml(result.strengths);
+
+    // Paragraph breakdown
+    const paraBreak = document.getElementById('emr-para-breakdown');
+    const rewriteBtns = document.getElementById('emr-rewrite-para-buttons');
+    paraBreak.innerHTML = '';
+    rewriteBtns.innerHTML = '';
+    let hasWeak = false;
+
+    (result.paragraphBreakdown || []).forEach(pb => {
+      const para = lastParagraphs[pb.index];
+      if (!para) return;
+      const ratingCls = pb.rating === 'Good' ? 'good' : pb.rating === 'OK' ? 'ok' : 'weak';
+      const card = document.createElement('div');
+      card.className = 'emr-para-card emr-para-' + ratingCls;
+      card.innerHTML = `
+        <div class="emr-para-header">
+          <span class="emr-para-label">Paragraph ${pb.index + 1}</span>
+          <span class="emr-para-rating ${ratingCls}">${pb.rating}</span>
+        </div>
+        <div class="emr-para-text-excerpt">"${para.substring(0,120)}${para.length>120?'…':''}"</div>
+        <div class="emr-para-comment">${pb.comment}</div>`;
+      paraBreak.appendChild(card);
+
+      if (pb.isWeak || pb.rating === 'Weak' || pb.rating === 'OK') {
+        hasWeak = true;
+        const btn = document.createElement('button');
+        btn.className = 'rewrite-para-btn';
+        btn.innerHTML = `<span class="emr-para-rating ${ratingCls}" style="margin-right:8px;">${pb.rating}</span>Paragraph ${pb.index+1}: "${para.substring(0,55)}…"`;
+        btn.onclick = () => rewriteParagraph(pb.index, btn);
+        rewriteBtns.appendChild(btn);
+      }
+    });
+
+    document.getElementById('emr-rewrite-section').style.display = hasWeak ? '' : 'none';
+    document.getElementById('emr-rewrite-area').style.display = 'none';
+    document.getElementById('emr-rewrite-result').style.display = 'none';
+
+    document.getElementById('emr-improvements').innerHTML = bulletHtml(result.improvements);
+    document.getElementById('emr-model').innerHTML = bulletHtml(result.modelPoints);
+
+    // Show mark scheme button for 12-mark questions
+    document.getElementById('emr-markscheme-section').style.display = marks === 12 ? '' : 'none';
+    document.getElementById('markscheme-panel').classList.remove('visible');
+    document.getElementById('ms-btn-label').textContent = 'Show AQA Mark Scheme';
+    document.getElementById('ms-btn-icon').textContent = '📋';
+
+    document.getElementById('emr-loading').style.display = 'none';
+    document.getElementById('emr-content').style.display = 'block';
+  } catch (err) {
+    document.getElementById('emr-loading').innerHTML = '<span style="color:var(--red)">Error marking answer. Please try again. (' + err.message + ')</span>';
+    document.getElementById('essay-answer').disabled = false;
+    document.getElementById('btn-mark-essay').disabled = false;
+  }
+}
+
+async function rewriteParagraph(paraIndex, btn) {
+  document.querySelectorAll('.rewrite-para-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const para = lastParagraphs[paraIndex];
+  const qText = document.getElementById('essay-q-text').textContent;
+  const relLabel = currentEssayCard.rel === 'christianity' ? 'Christianity' : 'Islam';
+  const marks = currentEssayMarks;
+  const pbInfo = (lastMarkingResult.paragraphBreakdown || []).find(p => p.index === paraIndex);
+
+  document.getElementById('emr-rewrite-area').style.display = 'block';
+  document.getElementById('emr-rewrite-loading').style.display = 'flex';
+  document.getElementById('emr-rewrite-result').style.display = 'none';
+  document.getElementById('emr-rewrite-area').scrollIntoView({ behavior: 'smooth' });
+
+  const prompt = `You are an AQA GCSE RS expert. A student wrote this paragraph in a ${marks}-mark question: "${qText}" (${relLabel}, topic: ${currentEssayCard.topic}).
+
+Their paragraph:
+"${para}"
+
+Examiner feedback on it: ${pbInfo ? pbInfo.comment : 'Needs improvement.'}
+
+Relevant quotes they could use:
+- "${currentEssayCard.q1}" (${currentEssayCard.r1})
+- "${currentEssayCard.q2}" (${currentEssayCard.r2})
+
+Rewrite ONLY this paragraph to Band ${marks === 12 ? '4' : '3'} standard. Keep the student's original argument/point but improve depth, religious knowledge, use of quotes, and ${marks === 12 ? 'evaluation' : 'explanation'}.
+
+Respond ONLY with JSON (no backticks):
+{
+  "improvedParagraph": "<the rewritten paragraph>",
+  "explanation": "<1-2 sentences explaining what changed and why it improves the mark>"
+}`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 600,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await response.json();
+    const raw = data.content.map(b => b.text || '').join('');
+    const result = JSON.parse(raw.replace(/```json|```/g, '').trim());
+
+    document.getElementById('emr-orig-para-text').textContent = para;
+    document.getElementById('emr-improved-para-text').textContent = result.improvedParagraph;
+    document.getElementById('emr-rewrite-explanation').textContent = result.explanation;
+    document.getElementById('emr-rewrite-loading').style.display = 'none';
+    document.getElementById('emr-rewrite-result').style.display = 'block';
+  } catch(err) {
+    document.getElementById('emr-rewrite-loading').innerHTML = '<span style="color:var(--red)">Error rewriting. Please try again.</span>';
+  }
+}
+
+// ══════════════════════════════════════════
+  // CONFIDENCE TRACKING
+  // Each topic key = card.rel + '|' + card.topic
+  // confidence[key] = { topic, rel, section, flashcard: {known,learning,seen}, quoteTest: {score,max,attempts}, essay: {scores:[],maxMarks:[]} }
+  // ══════════════════════════════════════════
+  const confidence = {};
+
+  function confKey(card) { return card.rel + '||' + card.topic; }
+
+  function ensureConf(card) {
+    const k = confKey(card);
+    if (!confidence[k]) {
+      confidence[k] = {
+        topic: card.topic,
+        rel: card.rel,
+        section: card.section,
+        flashcard: { known: 0, learning: 0, seen: 0 },
+        quoteTest: { score: 0, max: 0, attempts: 0 },
+        essay: { scores: [], maxMarks: [] }
+      };
+    }
+    return confidence[k];
+  }
+
+  // Called when user marks a flashcard known/learning
+  function recordFlashcard(card, isKnown) {
+    const c = ensureConf(card);
+    c.flashcard.seen++;
+    if (isKnown) { c.flashcard.known++; c.flashcard.learning = Math.max(0, c.flashcard.learning - 1); }
+    else { c.flashcard.learning++; c.flashcard.known = Math.max(0, c.flashcard.known - 1); }
+  }
+
+  // Called after quote test is submitted
+  function recordQuoteTest(card, marksScored, marksMax) {
+    const c = ensureConf(card);
+    c.quoteTest.score += marksScored;
+    c.quoteTest.max += marksMax;
+    c.quoteTest.attempts++;
+  }
+
+  // Called after essay is marked
+  function recordEssay(card, score, maxMarks) {
+    const c = ensureConf(card);
+    c.essay.scores.push(score);
+    c.essay.maxMarks.push(maxMarks);
+  }
+
+  // Compute a 0-100 confidence score for a topic
+  function computeConfidence(c) {
+    let totalWeight = 0, weightedScore = 0;
+
+    // Flashcard component (weight 30)
+    if (c.flashcard.seen > 0) {
+      const flashPct = c.flashcard.known / (c.flashcard.known + c.flashcard.learning + 0.001);
+      weightedScore += flashPct * 30;
+      totalWeight += 30;
+    }
+
+    // Quote test component (weight 40)
+    if (c.quoteTest.max > 0) {
+      const testPct = c.quoteTest.score / c.quoteTest.max;
+      weightedScore += testPct * 40;
+      totalWeight += 40;
+    }
+
+    // Essay component (weight 30) — use most recent essay
+    if (c.essay.scores.length > 0) {
+      const last = c.essay.scores.length - 1;
+      const essayPct = c.essay.scores[last] / c.essay.maxMarks[last];
+      weightedScore += essayPct * 30;
+      totalWeight += 30;
+    }
+
+    if (totalWeight === 0) return null; // no data
+    return Math.round((weightedScore / totalWeight) * 100);
+  }
+
+  function renderRanking() {
+    const relFilter = document.getElementById('ranking-filter-rel').value;
+    const list = document.getElementById('ranking-list');
+    const empty = document.getElementById('ranking-empty');
+
+    // Build entries for all topics in filtered religion
+    const cards = ALL_CARDS.filter(c => relFilter === 'all' || c.rel === relFilter);
+
+    const entries = cards.map(card => {
+      const k = confKey(card);
+      const c = confidence[k] || null;
+      const score = c ? computeConfidence(c) : null;
+      return { card, c, score };
+    });
+
+    // Split: scored vs unseen
+    const scored = entries.filter(e => e.score !== null).sort((a, b) => b.score - a.score);
+    const unseen = entries.filter(e => e.score === null);
+
+    if (scored.length === 0) {
+      empty.style.display = '';
+      list.innerHTML = '';
+      return;
+    }
+    empty.style.display = 'none';
+
+    list.innerHTML = '';
+
+    scored.forEach((e, idx) => {
+      const score = e.score;
+      const tier = score >= 70 ? 'high' : score >= 40 ? 'mid' : 'low';
+      const posClass = idx < 3 ? 'top' : idx >= scored.length - 3 ? 'bottom' : '';
+
+      const c = e.c;
+      // Build source pills
+      const hasFlash = c.flashcard.seen > 0;
+      const hasTest = c.quoteTest.max > 0;
+      const hasEssay = c.essay.scores.length > 0;
+
+      const flashLabel = hasFlash ? `${c.flashcard.known}✓ ${c.flashcard.learning}✗` : 'No data';
+      const testLabel = hasTest ? `${c.quoteTest.score}/${c.quoteTest.max}` : 'No data';
+      const essayLabel = hasEssay ? (() => { const l = c.essay.scores.length - 1; return `${c.essay.scores[l]}/${c.essay.maxMarks[l]}`; })() : 'No data';
+
+      const div = document.createElement('div');
+      div.className = 'rank-item';
+      div.innerHTML = `
+        <div class="rank-pos ${posClass}">${idx + 1}</div>
+        <div class="rank-body">
+          <div class="rank-topic">${e.card.topic}</div>
+          <div class="rank-section-label">${e.card.section} · <span class="check-rel-badge ${e.card.rel}" style="font-size:0.6rem;padding:1px 5px;display:inline;">${e.card.rel === 'christianity' ? 'C' : 'I'}</span></div>
+          <div class="rank-bar-wrap"><div class="rank-bar-fill ${tier}" style="width:${score}%"></div></div>
+          <div class="rank-source-pills">
+            <span class="rank-pill ${hasFlash ? 'has-data' : ''}">
+              <span class="rank-source-dot flashcard"></span>Flashcards: ${flashLabel}
+            </span>
+            <span class="rank-pill ${hasTest ? 'has-data' : ''}">
+              <span class="rank-source-dot quotetest"></span>Quote test: ${testLabel}
+            </span>
+            <span class="rank-pill ${hasEssay ? 'has-data' : ''}">
+              <span class="rank-source-dot essay"></span>Essay: ${essayLabel}
+            </span>
+          </div>
+        </div>
+        <div class="rank-score-label ${tier}">${score}%</div>`;
+      list.appendChild(div);
+    });
+
+    if (unseen.length > 0) {
+      const banner = document.createElement('div');
+      banner.className = 'rank-unseen-banner';
+      banner.textContent = `${unseen.length} topic${unseen.length !== 1 ? 's' : ''} not yet practised`;
+      list.appendChild(banner);
+
+      unseen.forEach(e => {
+        const div = document.createElement('div');
+        div.className = 'rank-item';
+        div.style.opacity = '0.45';
+        div.innerHTML = `
+          <div class="rank-pos" style="color:var(--subtle)">—</div>
+          <div class="rank-body">
+            <div class="rank-topic">${e.card.topic}</div>
+            <div class="rank-section-label">${e.card.section}</div>
+            <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:0%;background:var(--subtle)"></div></div>
+          </div>
+          <div class="rank-score-label none">—</div>`;
+        list.appendChild(div);
+      });
+    }
+  }
+
+  function clearConfidenceData() {
+    if (!confirm('Reset all confidence data? This cannot be undone.')) return;
+    Object.keys(confidence).forEach(k => delete confidence[k]);
+    renderRanking();
+  }
+
+  // ══════════════════════════════════════════
+  // FLASHCARDS (existing logic)
+  // ══════════════════════════════════════════
+</script>
+</body>
+</html>
